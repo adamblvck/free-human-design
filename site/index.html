@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>rave-engine — Gene Keys, Human Design & Astrology, computed locally</title>
+  <meta name="description" content="A free, local-only API for Gene Keys, Human Design and Astrology. Pure-JS, no data leaves your machine. A free connector to your AI and a body of work to start interpreting your profiles." />
+  <meta property="og:title" content="rave-engine — your inner cosmos, computed locally" />
+  <meta property="og:description" content="Free Gene Keys + Human Design + Astrology API. Local-only calculation, AI connector, and a path into the teaching." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- ===== Nav ===== -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="#top">
+        <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><use href="#hexmark" /></svg>
+        rave-engine
+      </a>
+      <div class="nav-links">
+        <a href="#demo">Live API</a>
+        <a href="#api">Docs</a>
+        <a href="https://www.npmjs.com/package/rave-engine" target="_blank" rel="noopener">npm</a>
+        <a class="nav-cta" href="https://github.com/adamblvck/eventhorizon/tree/main/rave-engine" target="_blank" rel="noopener">GitHub</a>
+        <button class="icon-btn" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" id="themeIcon"></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <span id="top"></span>
+
+  <!-- ===== Hero ===== -->
+  <header class="hero">
+    <svg class="hero-ring" viewBox="0 0 600 600" aria-hidden="true"><use href="#mandala" /></svg>
+    <div class="container">
+      <div class="eyebrow">Gene Keys · Human Design · Astrology</div>
+      <h1>Read the body of <span class="grad">your design.</span></h1>
+      <p class="tagline">
+        Gene&nbsp;Keys–certified, <strong>local-only</strong> calculation. A free API, a free
+        connector to your AI, and a free body of work — so you can start interpreting your
+        profiles and step into the teaching.
+      </p>
+      <div class="hero-cta">
+        <a href="#demo" class="btn btn-primary">Try the live API ↓</a>
+        <button class="install" id="installBtn" title="Copy"><span class="dollar">$</span> npm install rave-engine</button>
+        <a href="https://github.com/adamblvck/eventhorizon/tree/main/rave-engine" target="_blank" rel="noopener" class="btn btn-ghost">GitHub ↗</a>
+      </div>
+      <div class="trust">
+        <span><span class="dot"></span> Pure JavaScript · no native build</span>
+        <span><span class="dot"></span> No data leaves your machine</span>
+        <span><span class="dot"></span> Validated vs Swiss Ephemeris</span>
+        <span><span class="dot"></span> MIT licensed</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== Live demo ===== -->
+  <section id="demo">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">Live in your browser</div>
+        <h2>Cast a chart</h2>
+        <p>Enter a birth moment. It computes locally and returns Gene Keys, Human Design and Astrology — the same JSON the free API serves.</p>
+      </div>
+      <div class="demo-grid">
+        <!-- Form -->
+        <div class="card">
+          <div class="field">
+            <label for="date">Birth date</label>
+            <input type="date" id="date" value="1972-08-02" />
+          </div>
+          <div class="field">
+            <label for="time">Birth time</label>
+            <input type="time" id="time" value="14:30" />
+          </div>
+          <div class="field">
+            <label for="tz">IANA timezone</label>
+            <input type="text" id="tz" value="Asia/Bangkok" list="tzlist" placeholder="e.g. Europe/Brussels" />
+            <datalist id="tzlist"></datalist>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="lat">Latitude (optional)</label>
+              <input type="text" id="lat" placeholder="auto from tz" />
+            </div>
+            <div class="field">
+              <label for="lng">Longitude (optional)</label>
+              <input type="text" id="lng" placeholder="auto from tz" />
+            </div>
+          </div>
+          <button class="btn btn-primary" id="computeBtn" style="width:100%; justify-content:center;">✦ Compute chart</button>
+        </div>
+
+        <!-- Results -->
+        <div class="card">
+          <div class="result-tabs">
+            <button class="tab active" data-tab="summary">Summary</button>
+            <button class="tab" data-tab="json">JSON</button>
+            <button class="tab" data-tab="curl">cURL</button>
+            <button class="tab" data-tab="prompt">AI prompt</button>
+          </div>
+          <div class="endpoint-line">GET <b id="endpointUrl">/api/chart?…</b></div>
+
+          <div class="tab-panel active" id="panel-summary">
+            <div class="stat-grid">
+              <div class="stat"><div class="k">Type</div><div class="v" id="s-type">—</div></div>
+              <div class="stat"><div class="k">Authority</div><div class="v" id="s-auth">—</div></div>
+              <div class="stat"><div class="k">Profile</div><div class="v" id="s-profile">—</div></div>
+            </div>
+            <div style="font-size:0.78rem; color:var(--muted); margin:4px 0 6px;">Defined / open centers</div>
+            <div class="centers" id="s-centers"></div>
+            <div style="font-size:0.78rem; color:var(--muted); margin:16px 0 6px;">Gene Keys spheres</div>
+            <div class="spheres" id="s-spheres"></div>
+            <div style="font-size:0.78rem; color:var(--muted); margin:16px 0 6px;">Astrology</div>
+            <div class="centers" id="s-astro"></div>
+          </div>
+
+          <div class="tab-panel" id="panel-json"><pre class="code" id="jsonOut">…</pre></div>
+          <div class="tab-panel" id="panel-curl"><pre class="code" id="curlOut">…</pre></div>
+          <div class="tab-panel" id="panel-prompt">
+            <pre class="code" id="promptOut">Click “Compute chart”, then copy a ready-to-paste prompt for your AI.</pre>
+            <div class="copy-row">
+              <button class="btn" id="copyPromptBtn">Copy AI prompt</button>
+              <a class="btn btn-ghost" id="openChatGpt" target="_blank" rel="noopener">Open in ChatGPT ↗</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Features ===== -->
+  <section>
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">One primitive, three lenses</div>
+        <h2>Everything in your profile</h2>
+        <p>A single <code>computeChart()</code> returns three coherent layers of your design.</p>
+      </div>
+      <div class="features">
+        <div class="feature">
+          <div class="ficon">🧬</div>
+          <h3>Gene Keys</h3>
+          <p>The full Hologenetic Profile — gene key and line for every sphere, from Life's Work to your Pearl.</p>
+        </div>
+        <div class="feature">
+          <div class="ficon">⚡</div>
+          <h3>Human Design</h3>
+          <p>Activated gates, defined channels, defined &amp; open centers, plus Type, Authority and Profile — the whole bodygraph.</p>
+        </div>
+        <div class="feature">
+          <div class="ficon">🪐</div>
+          <h3>Astrology</h3>
+          <p>Ascendant, Descendant, MC and IC with Placidus, Whole-Sign or Equal houses — from a location or just your timezone.</p>
+        </div>
+        <div class="feature">
+          <div class="ficon">🔒</div>
+          <h3>Local-only</h3>
+          <p>Pure JavaScript, no native build, no ephemeris files. Nothing about your birth ever leaves the machine.</p>
+        </div>
+        <div class="feature">
+          <div class="ficon">🤖</div>
+          <h3>AI connector</h3>
+          <p>One call returns a ready-to-paste prompt so any AI can interpret your design and walk you into the teaching.</p>
+        </div>
+        <div class="feature">
+          <div class="ficon">✦</div>
+          <h3>Free &amp; open</h3>
+          <p>MIT licensed, free API, free npm package. Validated to the exact gate.line against Swiss Ephemeris.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== API docs ===== -->
+  <section id="api">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">Free API</div>
+        <h2>A slash and a query string</h2>
+        <p>Every endpoint is a plain <code>GET</code>. CORS is open — call it from a browser, a notebook, or your AI.</p>
+      </div>
+      <div class="card" style="padding:6px 6px 0;">
+        <table class="api-table">
+          <thead><tr><th>Endpoint</th><th>Returns</th></tr></thead>
+          <tbody>
+            <tr><td class="path">/api/chart</td><td>Full chart — Gene Keys + Human Design + Astrology</td></tr>
+            <tr><td class="path">/api/genekeys</td><td>Gene Keys spheres only</td></tr>
+            <tr><td class="path">/api/humandesign</td><td>Human Design bodygraph only</td></tr>
+            <tr><td class="path">/api/astrology</td><td>Ascendant / MC / houses (needs a location)</td></tr>
+            <tr><td class="path">/api/prompt</td><td>A ready-to-paste AI interpretation prompt</td></tr>
+            <tr><td class="path">/api/timezones</td><td>IANA timezone search (<code>?q=bali</code>)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="muted" style="font-family:var(--mono); font-size:0.84rem; margin-top:18px;">
+        Params: <b style="color:var(--accent)">date</b>=YYYY-MM-DD &nbsp;
+        <b style="color:var(--accent)">time</b>=HH:mm &nbsp;
+        <b style="color:var(--accent)">tz</b>=IANA &nbsp;
+        [<b style="color:var(--accent)">lat</b> <b style="color:var(--accent)">lng</b> <b style="color:var(--accent)">house</b>=placidus|whole|equal]
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== Teaching ===== -->
+  <section class="teaching">
+    <div class="container">
+      <div class="card">
+        <div class="eyebrow">Into the teaching</div>
+        <blockquote>“The calculation is only the doorway. The contemplation is the path.”</blockquote>
+        <p class="muted">rave-engine gives you the map for free — your Gene Keys, your Human Design, your stars — so you can spend your energy where it matters: living the experiment and contemplating the keys.</p>
+        <div class="hero-cta" style="margin-top:22px;">
+          <a href="#demo" class="btn btn-primary">Cast your chart</a>
+          <a href="https://genekeys.com" target="_blank" rel="noopener" class="btn btn-ghost">Explore the Gene Keys ↗</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer>
+    <div class="container footer-inner">
+      <div class="brand" style="font-size:1.05rem;">
+        <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><use href="#hexmark" /></svg>
+        rave-engine
+      </div>
+      <div class="footer-links">
+        <a href="https://www.npmjs.com/package/rave-engine" target="_blank" rel="noopener">npm</a>
+        <a href="https://github.com/adamblvck/eventhorizon/tree/main/rave-engine" target="_blank" rel="noopener">GitHub</a>
+        <a href="#api">API</a>
+        <a href="https://github.com/adamblvck/eventhorizon/blob/main/rave-engine/LICENSE" target="_blank" rel="noopener">MIT</a>
+      </div>
+      <div class="muted" style="font-size:0.84rem;">Crafted by Adam&nbsp;Blvck · BLVCK&nbsp;STUDIO</div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- ===== SVG defs (mark + mandala) ===== -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#a78bfa" />
+        <stop offset="1" stop-color="#d8b46a" />
+      </linearGradient>
+      <!-- Hexagram mark: a ring with six I-Ching lines (4 solid, 2 broken) -->
+      <g id="hexmark">
+        <circle cx="16" cy="16" r="14" fill="none" stroke="url(#g1)" stroke-width="1.6" />
+        <g stroke="url(#g1)" stroke-width="2.4" stroke-linecap="round">
+          <line x1="9" y1="9" x2="23" y2="9" />
+          <line x1="9" y1="13" x2="14" y2="13" /><line x1="18" y1="13" x2="23" y2="13" />
+          <line x1="9" y1="17" x2="23" y2="17" />
+          <line x1="9" y1="21" x2="14" y2="21" /><line x1="18" y1="21" x2="23" y2="21" />
+        </g>
+      </g>
+      <!-- Faint mandala ring for the hero backdrop -->
+      <g id="mandala" fill="none" stroke="url(#g1)" stroke-width="0.8" opacity="0.55">
+        <circle cx="300" cy="300" r="298" />
+        <circle cx="300" cy="300" r="250" />
+        <circle cx="300" cy="300" r="210" />
+        <g id="spokes"></g>
+      </g>
+    </defs>
+  </svg>
+
+  <script src="app.js"></script>
+</body>
+</html>

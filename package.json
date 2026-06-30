@@ -1,26 +1,69 @@
 {
   "name": "rave-engine",
-  "version": "0.1.0",
-  "description": "Standalone profile (p_/d_) calculation engine extracted from event-horizon-api: Swiss Ephemeris + I-Ching mandala mapping + IANA timezone autocomplete.",
+  "version": "1.0.0",
+  "description": "Pure-JS Human Design & Gene Keys engine: gates, lines, centers, channels and a full bodygraph (Type/Authority/Profile), plus extended astrology (Ascendant/MC/houses) and IANA timezone tools. No native build, no ephemeris data files.",
   "main": "src/index.js",
   "type": "commonjs",
   "bin": {
     "rave": "bin/rave.js"
   },
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src",
+    "bin",
+    "README.md",
+    "LICENSE",
+    "NOTICE"
+  ],
   "scripts": {
     "test": "jest",
-    "cli": "node bin/rave.js"
+    "coverage": "jest --coverage",
+    "coverage:badge": "jest --coverage && node scripts/make-coverage-badge.js",
+    "cli": "node bin/rave.js",
+    "prepublishOnly": "jest"
+  },
+  "keywords": [
+    "human-design",
+    "gene-keys",
+    "bodygraph",
+    "astrology",
+    "ephemeris",
+    "natal-chart",
+    "ascendant",
+    "midheaven",
+    "houses",
+    "placidus",
+    "i-ching",
+    "hexagram",
+    "gates",
+    "channels",
+    "centers",
+    "timezone"
+  ],
+  "author": "Adam Blvck <adam@blvckstudios.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/adamblvck/eventhorizon/tree/main/rave-engine#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adamblvck/eventhorizon.git",
+    "directory": "rave-engine"
+  },
+  "bugs": {
+    "url": "https://github.com/adamblvck/eventhorizon/issues"
+  },
+  "engines": {
+    "node": ">=16"
   },
   "dependencies": {
     "@vvo/tzdb": "^6.157.0",
+    "astronomia": "^4.2.0",
     "city-timezones": "^1.3.0",
-    "luxon": "^3.5.0",
-    "swisseph": "^0.5.14"
+    "luxon": "^3.5.0"
   },
   "devDependencies": {
     "jest": "^30.3.0"
-  },
-  "overrides": {
-    "node-gyp": "11.0.0"
   }
 }

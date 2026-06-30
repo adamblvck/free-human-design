@@ -1,26 +1,12 @@
-const swe = require('swisseph');
-
 const { mapLongitudeDegrees, normalizeAngleDegrees } = require('./mandala');
-const { ensureEphePath: ensureEphePathShared } = require('./ephemeris');
+const { getBackend, ensureEphePath } = require('./ephemeris');
 
-function ensureEphePath() {
-  // Centralized in ./ephemeris so we can print a one-time status check when needed.
-  // Enable with: EPHE_STATUS=true
-  ensureEphePathShared({ label: 'profile' });
-}
+// Longitude speed is computed by central difference (only the sign is consumed,
+// for the `retrograde` flag, so this is extremely robust across backends).
+const SPEED_H = 0.5; // days
 
 function jdUtcFromDate(dt) {
-  // JS Date is ms since epoch; use UTC getters.
-  const year = dt.getUTCFullYear();
-  const month = dt.getUTCMonth() + 1;
-  const day = dt.getUTCDate();
-  const hour =
-    dt.getUTCHours() +
-    dt.getUTCMinutes() / 60 +
-    dt.getUTCSeconds() / 3600 +
-    dt.getUTCMilliseconds() / 3600000;
-
-  return swe.swe_julday(year, month, day, hour, swe.SE_GREG_CAL);
+  return getBackend().julianDayUT(dt);
 }
 
 function signedAngleDiff(a, b) {
@@ -28,21 +14,38 @@ function signedAngleDiff(a, b) {
   return ((a - b + 540) % 360) - 180;
 }
 
-function sunLongitudeDegrees(jdUt, flags) {
-  const res = swe.swe_calc_ut(jdUt, swe.SE_SUN, flags);
-  return res.longitude;
+function bodyLongitude(body, jdUt) {
+  return getBackend().longitude(body, jdUt);
 }
 
-function findPreviousSolarLongitude(jdUt, deltaDegrees, flags) {
-  const currentSun = sunLongitudeDegrees(jdUt, flags);
+function bodyLongitudeSpeed(body, jdUt) {
+  const hi = bodyLongitude(body, jdUt + SPEED_H);
+  const lo = bodyLongitude(body, jdUt - SPEED_H);
+  return signedAngleDiff(hi, lo) / (2 * SPEED_H);
+}
+
+function sunLongitudeDegrees(jdUt) {
+  return bodyLongitude('sun', jdUt);
+}
+
+/**
+ * Find the previous Julian Day (UT) at which the Sun's longitude was
+ * `deltaDegrees` behind its value at `jdUt`. Used to locate the Human Design
+ * "design" moment (88° of solar arc before birth).
+ *
+ * @param {number} jdUt
+ * @param {number} deltaDegrees
+ * @param {*} [_flags] deprecated/ignored (kept for backward compatibility)
+ */
+function findPreviousSolarLongitude(jdUt, deltaDegrees, _flags) {
+  const currentSun = sunLongitudeDegrees(jdUt);
   const target = normalizeAngleDegrees(currentSun - deltaDegrees);
 
   let highJd = jdUt;
-  let step = 1.0; // days
+  const step = 1.0; // days
   let lowJd = highJd - step;
 
-  let highDiff = signedAngleDiff(sunLongitudeDegrees(highJd, flags), target);
-  let lowDiff = signedAngleDiff(sunLongitudeDegrees(lowJd, flags), target);
+  let lowDiff = signedAngleDiff(sunLongitudeDegrees(lowJd), target);
 
   let iterations = 0;
   const maxIterations = 365;
@@ -50,7 +53,7 @@ function findPreviousSolarLongitude(jdUt, deltaDegrees, flags) {
   // Walk back until we bracket the crossing.
   while (lowDiff > 0 && iterations < maxIterations) {
     lowJd -= step;
-    lowDiff = signedAngleDiff(sunLongitudeDegrees(lowJd, flags), target);
+    lowDiff = signedAngleDiff(sunLongitudeDegrees(lowJd), target);
     iterations += 1;
   }
 
@@ -61,24 +64,29 @@ function findPreviousSolarLongitude(jdUt, deltaDegrees, flags) {
   // Binary search for the crossing.
   for (let i = 0; i < 50; i += 1) {
     const mid = 0.5 * (lowJd + highJd);
-    const midDiff = signedAngleDiff(sunLongitudeDegrees(mid, flags), target);
+    const midDiff = signedAngleDiff(sunLongitudeDegrees(mid), target);
     if (midDiff > 0) {
       highJd = mid;
-      highDiff = midDiff;
     } else {
       lowJd = mid;
-      lowDiff = midDiff;
     }
   }
 
   return 0.5 * (lowJd + highJd);
 }
 
-function getPlanetAtJd(jdUt, planetId, flags) {
-  const r = swe.swe_calc_ut(jdUt, planetId, flags);
+function getBody(jdUt, body) {
   return {
-    longitude: r.longitude,
-    longitudeSpeed: r.longitudeSpeed,
+    longitude: bodyLongitude(body, jdUt),
+    longitudeSpeed: bodyLongitudeSpeed(body, jdUt),
+  };
+}
+
+function deriveOpposite(planet) {
+  // Earth = Sun + 180°, South Node = North Node + 180°. Speed carries over.
+  return {
+    longitude: normalizeAngleDegrees(planet.longitude + 180),
+    longitudeSpeed: planet.longitudeSpeed,
   };
 }
 
@@ -100,55 +108,46 @@ function mapPlanetToGateLineColor(planet) {
   };
 }
 
-function computeProfileSpheres({ birthUtc }) {
-  ensureEphePath();
-
-  // HD typically uses tropical; speeds are needed for retrograde flags later.
-  const flags = swe.SEFLG_SWIEPH | swe.SEFLG_SPEED;
-
+// The two stream moments shared by every computation below.
+function streamMoments({ birthUtc }) {
   const jdPersonality = jdUtcFromDate(birthUtc);
-  const jdDesign = findPreviousSolarLongitude(jdPersonality, 88.0, flags);
+  const jdDesign = findPreviousSolarLongitude(jdPersonality, 88.0);
+  return { jdPersonality, jdDesign };
+}
+
+function computeProfileSpheres({ birthUtc }) {
+  const { jdPersonality, jdDesign } = streamMoments({ birthUtc });
 
   // Personality bodies
-  const pSun = getPlanetAtJd(jdPersonality, swe.SE_SUN, flags);
-  const pMercury = getPlanetAtJd(jdPersonality, swe.SE_MERCURY, flags);
-  const pVenus = getPlanetAtJd(jdPersonality, swe.SE_VENUS, flags);
-  const pMars = getPlanetAtJd(jdPersonality, swe.SE_MARS, flags);
-  const pJupiter = getPlanetAtJd(jdPersonality, swe.SE_JUPITER, flags);
+  const pSun = getBody(jdPersonality, 'sun');
+  const pMercury = getBody(jdPersonality, 'mercury');
+  const pVenus = getBody(jdPersonality, 'venus');
+  const pMars = getBody(jdPersonality, 'mars');
+  const pJupiter = getBody(jdPersonality, 'jupiter');
 
   // Design bodies
-  const dSun = getPlanetAtJd(jdDesign, swe.SE_SUN, flags);
-  const dMoon = getPlanetAtJd(jdDesign, swe.SE_MOON, flags);
-  const dVenus = getPlanetAtJd(jdDesign, swe.SE_VENUS, flags);
-  const dMars = getPlanetAtJd(jdDesign, swe.SE_MARS, flags);
-  const dJupiter = getPlanetAtJd(jdDesign, swe.SE_JUPITER, flags);
-  const dSaturn = getPlanetAtJd(jdDesign, swe.SE_SATURN, flags);
-  const dUranus = getPlanetAtJd(jdDesign, swe.SE_URANUS, flags);
+  const dSun = getBody(jdDesign, 'sun');
+  const dMoon = getBody(jdDesign, 'moon');
+  const dVenus = getBody(jdDesign, 'venus');
+  const dMars = getBody(jdDesign, 'mars');
+  const dJupiter = getBody(jdDesign, 'jupiter');
+  const dSaturn = getBody(jdDesign, 'saturn');
+  const dUranus = getBody(jdDesign, 'uranus');
 
   // Earth is opposite Sun in HD.
-  const pEarth = { longitude: normalizeAngleDegrees(pSun.longitude + 180), longitudeSpeed: pSun.longitudeSpeed };
-  const dEarth = { longitude: normalizeAngleDegrees(dSun.longitude + 180), longitudeSpeed: dSun.longitudeSpeed };
+  const pEarth = deriveOpposite(pSun);
+  const dEarth = deriveOpposite(dSun);
 
-  // Map per setup doc:
-  // - p_sun = Life's Work
-  // - p_earth = Evolution
-  // - d_sun = Radiance
-  // - d_earth = Purpose
-  // - p_venus = IQ
-  // - p_mars = EQ
-  // - p_jupiter = Pearl
-  // - p_mercury = Relating
-  // - d_moon = Attraction
-  // - d_venus = SQ
-  // - d_mars = Core
-  // - d_jupiter = Culture
-  // - d_saturn = Core Stability
-  // - d_uranus = Creativity
-
+  // Sphere → body map (parity with event-horizon-api):
+  // - p_sun = Life's Work,  p_earth = Evolution
+  // - d_sun = Radiance,     d_earth = Purpose
+  // - p_venus = IQ,  p_mars = EQ,  p_jupiter = Pearl,  p_mercury = Relating
+  // - d_moon = Attraction, d_venus = SQ, d_mars = Core, d_jupiter = Culture
+  // - d_saturn = Core Stability, d_uranus = Creativity
   return {
     lifeswork: mapPlanetToGKLine(pSun),
-    // evolution: mapPlanetToGKLine(pEarth),
-    // radiance: mapPlanetToGKLine(dSun),
+    evolution: mapPlanetToGKLine(pEarth),
+    radiance: mapPlanetToGKLine(dSun),
     purpose: mapPlanetToGKLine(dEarth),
 
     iq: mapPlanetToGKLine(pVenus),
@@ -163,7 +162,6 @@ function computeProfileSpheres({ birthUtc }) {
     stability: mapPlanetToGKLine(dSaturn),
     creativity: mapPlanetToGKLine(dUranus),
 
-    // Useful metadata (not persisted directly yet)
     _meta: {
       jd_personality: jdPersonality,
       jd_design: jdDesign,
@@ -172,36 +170,28 @@ function computeProfileSpheres({ birthUtc }) {
 }
 
 function computeEngineTest({ birthUtc }) {
-  ensureEphePath();
-
-  // HD typically uses tropical; speeds are needed for retrograde flags later.
-  const flags = swe.SEFLG_SWIEPH | swe.SEFLG_SPEED;
-
-  const jdPersonality = jdUtcFromDate(birthUtc);
-  const jdDesign = findPreviousSolarLongitude(jdPersonality, 88.0, flags);
+  const { jdPersonality, jdDesign } = streamMoments({ birthUtc });
 
   // Personality bodies
-  const pSun = getPlanetAtJd(jdPersonality, swe.SE_SUN, flags);
-  const pMercury = getPlanetAtJd(jdPersonality, swe.SE_MERCURY, flags);
-  const pVenus = getPlanetAtJd(jdPersonality, swe.SE_VENUS, flags);
-  const pMars = getPlanetAtJd(jdPersonality, swe.SE_MARS, flags);
-  const pJupiter = getPlanetAtJd(jdPersonality, swe.SE_JUPITER, flags);
+  const pSun = getBody(jdPersonality, 'sun');
+  const pMercury = getBody(jdPersonality, 'mercury');
+  const pVenus = getBody(jdPersonality, 'venus');
+  const pMars = getBody(jdPersonality, 'mars');
+  const pJupiter = getBody(jdPersonality, 'jupiter');
 
   // Design bodies
-  const dSun = getPlanetAtJd(jdDesign, swe.SE_SUN, flags);
-  const dMoon = getPlanetAtJd(jdDesign, swe.SE_MOON, flags);
-  const dVenus = getPlanetAtJd(jdDesign, swe.SE_VENUS, flags);
-  const dMars = getPlanetAtJd(jdDesign, swe.SE_MARS, flags);
-  const dJupiter = getPlanetAtJd(jdDesign, swe.SE_JUPITER, flags);
-  const dSaturn = getPlanetAtJd(jdDesign, swe.SE_SATURN, flags);
-  const dUranus = getPlanetAtJd(jdDesign, swe.SE_URANUS, flags);
+  const dSun = getBody(jdDesign, 'sun');
+  const dMoon = getBody(jdDesign, 'moon');
+  const dVenus = getBody(jdDesign, 'venus');
+  const dMars = getBody(jdDesign, 'mars');
+  const dJupiter = getBody(jdDesign, 'jupiter');
+  const dSaturn = getBody(jdDesign, 'saturn');
+  const dUranus = getBody(jdDesign, 'uranus');
 
-  // Earth is opposite Sun in HD.
-  const pEarth = { longitude: normalizeAngleDegrees(pSun.longitude + 180), longitudeSpeed: pSun.longitudeSpeed };
-  const dEarth = { longitude: normalizeAngleDegrees(dSun.longitude + 180), longitudeSpeed: dSun.longitudeSpeed };
+  const pEarth = deriveOpposite(pSun);
+  const dEarth = deriveOpposite(dSun);
 
   return {
-    // Return a debug-friendly, explicit split of "personality" (p_) and "design" (d_).
     p_: {
       sun: mapPlanetToGateLineColor(pSun),
       earth: mapPlanetToGateLineColor(pEarth),
@@ -220,7 +210,6 @@ function computeEngineTest({ birthUtc }) {
       saturn: mapPlanetToGateLineColor(dSaturn),
       uranus: mapPlanetToGateLineColor(dUranus),
     },
-    // Also include the "spheres" mapping used by profile/event logic, for cross-checking.
     spheres: computeProfileSpheres({ birthUtc }),
     _meta: {
       jd_personality: jdPersonality,
@@ -229,13 +218,71 @@ function computeEngineTest({ birthUtc }) {
   };
 }
 
+// Full Human Design activation set: all 13 bodies in BOTH streams (26 gates),
+// used to derive the bodygraph (centers / channels). Earth and South Node are
+// derived from Sun / North Node.
+const HD_BODIES = [
+  'sun',
+  'earth',
+  'moon',
+  'north_node',
+  'south_node',
+  'mercury',
+  'venus',
+  'mars',
+  'jupiter',
+  'saturn',
+  'uranus',
+  'neptune',
+  'pluto',
+];
+
+function activationAt(jdUt, body) {
+  let planet;
+  if (body === 'earth') planet = deriveOpposite(getBody(jdUt, 'sun'));
+  else if (body === 'south_node') planet = deriveOpposite(getBody(jdUt, 'north_node'));
+  else planet = getBody(jdUt, body);
+
+  const { hexagram, line, color } = mapLongitudeDegrees(planet.longitude);
+  return {
+    body,
+    gate: hexagram,
+    line,
+    color,
+    longitude: planet.longitude,
+    retrograde: planet.longitudeSpeed < 0,
+  };
+}
+
+/**
+ * Compute the 26 Human Design activations (13 bodies × personality + design).
+ * @param {{ birthUtc: Date }} args
+ * @returns {{
+ *   personality: Array<object>,
+ *   design: Array<object>,
+ *   _meta: { jd_personality: number, jd_design: number }
+ * }}
+ */
+function computeActivations({ birthUtc }) {
+  const { jdPersonality, jdDesign } = streamMoments({ birthUtc });
+  const personality = HD_BODIES.map((b) => ({ stream: 'personality', ...activationAt(jdPersonality, b) }));
+  const design = HD_BODIES.map((b) => ({ stream: 'design', ...activationAt(jdDesign, b) }));
+  return {
+    personality,
+    design,
+    _meta: { jd_personality: jdPersonality, jd_design: jdDesign },
+  };
+}
+
 module.exports = {
   computeProfileSpheres,
   computeEngineTest,
+  computeActivations,
   jdUtcFromDate,
   // Exported for reuse in global transit scanning (design stream).
-  // NOTE: This computes "Design time" by finding the previous Sun longitude crossing
-  // at (currentSun - 88°), matching HD "design" definition used elsewhere in this repo.
   findPreviousSolarLongitude,
   signedAngleDiff,
+  // Kept exported for backward compatibility (now a no-op).
+  ensureEphePath,
+  HD_BODIES,
 };

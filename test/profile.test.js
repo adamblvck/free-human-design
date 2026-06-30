@@ -33,6 +33,8 @@ const EXPECTED_DESIGN = {
 
 const EXPECTED_SPHERES = {
   lifeswork: { gk: 33, line: 3 },
+  evolution: { gk: 19, line: 3 },
+  radiance: { gk: 24, line: 5 },
   purpose: { gk: 44, line: 5 },
   iq: { gk: 12, line: 6 },
   eq: { gk: 4, line: 4 },

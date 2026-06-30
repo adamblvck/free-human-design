@@ -2,29 +2,33 @@ const { parseBirthToUtc, BirthParseError } = require('./birth/parseBirth');
 const {
   computeEngineTest,
   computeProfileSpheres,
+  computeActivations,
   jdUtcFromDate,
   findPreviousSolarLongitude,
   signedAngleDiff,
 } = require('./calc/profile');
 const { mapLongitudeDegrees, normalizeAngleDegrees } = require('./calc/mandala');
-const { ensureEphePath } = require('./calc/ephemeris');
+const { ensureEphePath, getBackend } = require('./calc/ephemeris');
 const { searchTimezones, formatOffset } = require('./timezone/search');
+const { locationForTimezone, resolveLocation } = require('./timezone/location');
+const {
+  CENTERS,
+  CENTER_LABELS,
+  GATE_CENTER,
+  CHANNELS,
+  computeBodygraph,
+} = require('./hd/bodygraph');
+const { computeAngles, computeHouses, signOf, SIGNS } = require('./hd/houses');
+const { computeChart } = require('./chart');
 
 /**
  * High-level entry point: take human-friendly birth strings (date/time/timezone)
  * and return the same `engine` payload that the API's /maintenance/engine_test
  * endpoint produces, with the parsed input echoed back for traceability.
  *
+ * For the full Gene Keys + Human Design + Astrology output, use `computeChart`.
+ *
  * @param {{ birthdate: string, birthtime: string, timezone: string }} input
- * @returns {{
- *   input: {
- *     birthdate: string,
- *     birthtime: string,
- *     timezone: string,
- *     birth_utc: string
- *   },
- *   engine: { p_: object, d_: object, spheres: object, _meta: object }
- * }}
  */
 function computeProfile(input) {
   const birthUtc = parseBirthToUtc(input);
@@ -42,6 +46,7 @@ function computeProfile(input) {
 module.exports = {
   // Top-level convenience
   computeProfile,
+  computeChart,
 
   // Birth parsing
   parseBirthToUtc,
@@ -50,6 +55,7 @@ module.exports = {
   // Engine internals (parity with event-horizon-api)
   computeEngineTest,
   computeProfileSpheres,
+  computeActivations,
   jdUtcFromDate,
   findPreviousSolarLongitude,
   signedAngleDiff,
@@ -58,10 +64,26 @@ module.exports = {
   mapLongitudeDegrees,
   normalizeAngleDegrees,
 
-  // Ephemeris path management (mostly internal, exposed for power users)
+  // Human Design bodygraph
+  computeBodygraph,
+  CENTERS,
+  CENTER_LABELS,
+  GATE_CENTER,
+  CHANNELS,
+
+  // Extended astrology
+  computeAngles,
+  computeHouses,
+  signOf,
+  SIGNS,
+
+  // Ephemeris backend (mostly internal; exposed for power users)
+  getBackend,
   ensureEphePath,
 
-  // Timezone autocomplete
+  // Timezone autocomplete + location
   searchTimezones,
   formatOffset,
+  locationForTimezone,
+  resolveLocation,
 };

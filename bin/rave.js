@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { computeProfile, searchTimezones } = require('../src');
+const { computeProfile, computeChart, searchTimezones } = require('../src');
 
 function parseArgs(argv) {
   // Tiny argv parser. Supports `--key value` and `--key=value`. No deps.
@@ -34,8 +34,12 @@ function printUsage() {
   const lines = [
     'rave-engine CLI',
     '',
-    'Compute a profile:',
+    'Compute a profile (p_/d_ + spheres):',
     '  rave --date 1972-08-02 --time 14:30 --tz Asia/Bangkok',
+    '',
+    'Compute the full chart (Gene Keys + Human Design + Astrology):',
+    '  rave --chart --date 1972-08-02 --time 14:30 --tz Asia/Bangkok',
+    '  rave --chart --date 1972-08-02 --time 14:30 --tz Asia/Bangkok --lat 13.75 --lng 100.5',
     '',
     'Aliases: --date|--birthdate, --time|--birthtime, --tz|--timezone',
     '',
@@ -44,9 +48,12 @@ function printUsage() {
     '  rave --tz-search "los ang" --limit 5',
     '',
     'Flags:',
-    '  --json     Print full JSON (default for profile mode).',
-    '  --pretty   Indent output (default: 2 spaces).',
-    '  --help     Show this help.',
+    '  --chart      Full Gene Keys + Human Design + Astrology output.',
+    '  --lat --lng  Birth coordinates (else derived from the timezone city).',
+    '  --house      House system for --chart: placidus|whole|equal (default placidus).',
+    '  --json       Print full JSON instead of the readable summary.',
+    '  --pretty     Indent output (default: 2 spaces).',
+    '  --help       Show this help.',
   ];
   // eslint-disable-next-line no-console
   console.log(lines.join('\n'));
@@ -81,6 +88,74 @@ function runTzSearch(query, limit) {
   return 0;
 }
 
+function printChartSummary(chart) {
+  const { geneKeys, humanDesign: hd, astrology } = chart;
+  const lines = [];
+  lines.push(`Birth (UTC): ${chart.input.birth_utc}`);
+  lines.push('');
+  lines.push('— Human Design —');
+  lines.push(`  Type:      ${hd.type}`);
+  lines.push(`  Authority: ${hd.authority}`);
+  lines.push(`  Profile:   ${hd.profile}`);
+  lines.push(`  Definition:${hd.definitionCount} channels`);
+  lines.push(`  Defined centers: ${hd.definedCenters.join(', ') || '(none)'}`);
+  lines.push(`  Open centers:    ${hd.openCenters.join(', ') || '(none)'}`);
+  lines.push(`  Channels: ${hd.definedChannels.map((c) => `${c.key}${c.name ? ` (${c.name})` : ''}`).join(', ') || '(none)'}`);
+  lines.push(`  Activated gates: ${hd.activatedGates.join(', ')}`);
+  lines.push('');
+  lines.push('— Gene Keys (spheres) —');
+  for (const [sphere, v] of Object.entries(geneKeys.spheres)) {
+    lines.push(`  ${sphere.padEnd(11)} ${v.gk}.${v.line}`);
+  }
+  if (astrology) {
+    lines.push('');
+    lines.push(`— Astrology (${astrology.location.city || 'lat/lng'}, ${astrology.houses.system} houses) —`);
+    const a = astrology.angles;
+    const fa = (x) => `${x.sign} ${x.degInSign.toFixed(2)}°`;
+    lines.push(`  Ascendant:  ${fa(a.ascendant)}`);
+    lines.push(`  Descendant: ${fa(a.descendant)}`);
+    lines.push(`  MC:         ${fa(a.mc)}`);
+    lines.push(`  IC:         ${fa(a.ic)}`);
+  } else {
+    lines.push('');
+    lines.push('— Astrology — (no location resolved; pass --lat/--lng or a recognized --tz)');
+  }
+  return lines.join('\n');
+}
+
+function runChart(args) {
+  const birthdate = args.date || args.birthdate;
+  const birthtime = args.time || args.birthtime;
+  const timezone = args.tz || args.timezone;
+  if (!birthdate || !birthtime || !timezone) {
+    // eslint-disable-next-line no-console
+    console.error('error: --date, --time and --tz are all required\n');
+    printUsage();
+    return 2;
+  }
+  const lat = Number(args.lat);
+  const lng = Number(args.lng);
+  const location =
+    Number.isFinite(lat) && Number.isFinite(lng) ? { lat, lng } : undefined;
+  const chart = computeChart({
+    birthdate,
+    birthtime,
+    timezone,
+    location,
+    houseSystem: args.house || 'placidus',
+  });
+
+  if (args.json) {
+    const indent = args.pretty === false ? 0 : 2;
+    // eslint-disable-next-line no-console
+    console.log(JSON.stringify(chart, null, indent));
+  } else {
+    // eslint-disable-next-line no-console
+    console.log(printChartSummary(chart));
+  }
+  return 0;
+}
+
 function runProfile(args) {
   const birthdate = args.date || args.birthdate;
   const birthtime = args.time || args.birthtime;
@@ -111,6 +186,10 @@ function main(argv) {
   if (args['tz-search'] !== undefined && args['tz-search'] !== true) {
     const limit = Number.isFinite(Number(args.limit)) ? Number(args.limit) : 10;
     return runTzSearch(String(args['tz-search']), limit);
+  }
+
+  if (args.chart) {
+    return runChart(args);
   }
 
   return runProfile(args);

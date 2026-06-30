@@ -1,0 +1,28 @@
+# Netlify config for the rave-engine site + free API.
+# Static landing page in ./site, serverless API in ./netlify/functions.
+
+[build]
+  publish = "site"
+  functions = "netlify/functions"
+
+[functions]
+  # The engine + its deps (astronomia, luxon, @vvo/tzdb, city-timezones) bundle
+  # automatically via dependency tracing.
+  node_bundler = "esbuild"
+  # `swisseph` is an OPTIONAL backend that is never installed here; leave its
+  # bare require external so the bundler doesn't try to resolve it. At runtime
+  # the optional path is guarded by try/catch and falls back to astronomia.
+  external_node_modules = ["swisseph"]
+
+# Pretty REST paths → the single routing function.
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api"
+  to = "/.netlify/functions/api"
+  status = 200
+  force = true

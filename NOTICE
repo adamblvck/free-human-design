@@ -1,0 +1,33 @@
+rave-engine
+Copyright (c) 2026 Adam Blvck / Blvck Studios
+Licensed under the MIT License (see LICENSE).
+
+This product includes and/or depends on the following third-party software:
+
+- astronomia (https://github.com/commenthol/astronomia) — MIT License.
+  Used as the default, pure-JavaScript ephemeris backend (VSOP87 planetary
+  theory, lunar theory, sidereal time, nutation). Bundles its own data; no
+  external ephemeris files are required.
+
+- luxon (https://github.com/moment/luxon) — MIT License.
+  Date/time and IANA timezone handling.
+
+- @vvo/tzdb (https://github.com/vvo/tzdb) — MIT License.
+  IANA timezone metadata and current offsets.
+
+- city-timezones (https://github.com/kevinroberts/city-timezones) — MIT License.
+  City → timezone and representative coordinate lookups.
+
+Optional, NOT bundled or required:
+
+- swisseph (https://github.com/mivion/swisseph) — AGPL / commercial dual
+  license. rave-engine can use it as an opt-in high-precision backend
+  (EPHE_BACKEND=swisseph) only if a consumer installs it themselves. It is not
+  a dependency of this package and none of its code or Astrodienst data files
+  are distributed with rave-engine.
+
+Reference data:
+
+- The Human Design bodygraph reference data (gate→center map and the 36
+  channels) and the Gene Keys / I-Ching mandala mapping are based on the
+  standard, widely-published Human Design and Gene Keys systems.
