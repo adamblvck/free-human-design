@@ -45,14 +45,13 @@
   ],
   "author": "Adam Blvck <adam@blvckstudios.com>",
   "license": "MIT",
-  "homepage": "https://github.com/adamblvck/eventhorizon/tree/main/rave-engine#readme",
+  "homepage": "https://rave-engine.netlify.app",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/adamblvck/eventhorizon.git",
-    "directory": "rave-engine"
+    "url": "git+https://github.com/adamblvck/rave-engine.git"
   },
   "bugs": {
-    "url": "https://github.com/adamblvck/eventhorizon/issues"
+    "url": "https://github.com/adamblvck/rave-engine/issues"
   },
   "engines": {
     "node": ">=16"

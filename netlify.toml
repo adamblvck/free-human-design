@@ -14,6 +14,12 @@
   # the optional path is guarded by try/catch and falls back to astronomia.
   external_node_modules = ["swisseph"]
 
+# Long-cache the bundled glyph font.
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
 # Pretty REST paths → the single routing function.
 [[redirects]]
   from = "/api/*"

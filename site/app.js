@@ -18,17 +18,57 @@
   $('#themeToggle').addEventListener('click', () =>
     applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));
 
-  /* ---------- Hero mandala spokes ---------- */
-  const spokes = $('#spokes');
-  if (spokes) {
-    const cx = 300, cy = 300;
+  /* ---------- Hero rings: ticks + rotating zodiac ---------- */
+  const cx = 300, cy = 300;
+  const tick = (r1, r2, a) =>
+    `<line x1="${(cx + r1 * Math.cos(a)).toFixed(1)}" y1="${(cy + r1 * Math.sin(a)).toFixed(1)}" x2="${(cx + r2 * Math.cos(a)).toFixed(1)}" y2="${(cy + r2 * Math.sin(a)).toFixed(1)}"/>`;
+  const outerTicks = $('#heroOuterTicks');
+  if (outerTicks) {
+    let g = '';
+    for (let i = 0; i < 96; i++) {
+      const a = (i / 96) * Math.PI * 2;
+      g += tick(298, i % 8 === 0 ? 286 : 292, a);
+    }
+    outerTicks.innerHTML = g;
+  }
+  const innerTicks = $('#heroInnerTicks');
+  if (innerTicks) {
     let g = '';
     for (let i = 0; i < 64; i++) {
-      const a = (i / 64) * Math.PI * 2 - Math.PI / 2;
-      const r1 = 250, r2 = i % 8 === 0 ? 290 : 270;
-      g += `<line x1="${cx + r1 * Math.cos(a)}" y1="${cy + r1 * Math.sin(a)}" x2="${cx + r2 * Math.cos(a)}" y2="${cy + r2 * Math.sin(a)}"/>`;
+      const a = (i / 64) * Math.PI * 2;
+      g += tick(210, i % 8 === 0 ? 224 : 217, a);
     }
-    spokes.innerHTML = g;
+    innerTicks.innerHTML = g;
+  }
+  const heroZodiac = $('#heroZodiac');
+  if (heroZodiac) {
+    // Astrodot zodiac glyphs (a..l) riding the slow outer ring.
+    let g = '';
+    for (let i = 0; i < 12; i++) {
+      const a = (i / 12) * Math.PI * 2 - Math.PI / 2;
+      const x = cx + 268 * Math.cos(a), y = cy + 268 * Math.sin(a);
+      g += `<text class="hz-glyph" x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="middle" dominant-baseline="central" transform="rotate(${(a * 180 / Math.PI + 90).toFixed(1)} ${x.toFixed(1)} ${y.toFixed(1)})">${'abcdefghijkl'[i]}</text>`;
+    }
+    heroZodiac.innerHTML = g;
+  }
+
+  /* ---------- Ambient glyph field ---------- */
+  const field = $('#glyphField');
+  if (field && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const GLYPHS = 'ABCDEFGHIJLMabcdefghijkl'; // planets + zodiac (Astrodot)
+    let html = '';
+    for (let i = 0; i < 18; i++) {
+      const ch = GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+      const left = (Math.random() * 100).toFixed(1);
+      const top = (55 + Math.random() * 55).toFixed(1); // start in the lower half+
+      const size = (18 + Math.random() * 42).toFixed(0);
+      const dur = (55 + Math.random() * 70).toFixed(0);
+      const delay = (-Math.random() * 120).toFixed(0);
+      const op = (0.035 + Math.random() * 0.05).toFixed(3);
+      const rot = ((Math.random() - 0.5) * 120).toFixed(0);
+      html += `<span style="left:${left}vw; top:${top}vh; font-size:${size}px; --dur:${dur}s; --delay:${delay}s; --op:${op}; --rot:${rot}deg">${ch}</span>`;
+    }
+    field.innerHTML = html;
   }
 
   /* ---------- Toast ---------- */
@@ -68,16 +108,146 @@
     $('#panel-' + tab.dataset.tab).classList.add('active');
   }));
 
+  /* ---------- Docs tabs (REST / JavaScript) ---------- */
+  $$('.docs-tab').forEach((tab) => tab.addEventListener('click', () => {
+    $$('.docs-tab').forEach((t) => t.classList.remove('active'));
+    $$('.docs-panel').forEach((p) => p.classList.remove('active'));
+    tab.classList.add('active');
+    $('#docs-' + tab.dataset.docs).classList.add('active');
+  }));
+
+  /* ---------- Copy-minis (literal data-copy) ---------- */
+  $$('[data-copy]').forEach((btn) => btn.addEventListener('click', () =>
+    copy(btn.dataset.copy, 'Copied')));
+
+  /* ---------- JavaScript usage snippet ---------- */
+  const JS_USAGE = `const { computeChart } = require('rave-engine');
+
+const chart = computeChart({
+  birthdate: '1990-04-16',
+  birthtime: '05:35',
+  timezone: 'Europe/Brussels',
+});
+
+console.log(chart.humanDesign.type);             // "Manifesting Generator"
+console.log(chart.humanDesign.profile);          // "6/2"
+console.log(chart.geneKeys.spheres.lifeswork.gk); // 13
+console.log(chart.astrology.angles.ascendant.sign); // "Aries"`;
+  const copyUsage = $('#copyUsageBtn');
+  if (copyUsage) copyUsage.addEventListener('click', () => copy(JS_USAGE, 'Usage snippet copied'));
+
+  /* ---------- Markdown doc for LLM use ---------- */
+  const LLM_MARKDOWN = `# Rave Engine — Human Design, Gene Keys & Astrology API
+
+Rave Engine is a free, open-source, local-first engine for computing Human Design bodygraphs, Gene Keys hologenetic profiles, and astrology charts (Ascendant, MC, houses). Pure JavaScript — no native build, no ephemeris files. MIT licensed. Validated to the exact gate.line against Swiss Ephemeris.
+
+## Two ways to use it
+
+### 1. Offline (npm) — your birth data never leaves your machine
+
+\`\`\`bash
+npm install rave-engine
+\`\`\`
+
+\`\`\`js
+const { computeChart } = require('rave-engine');
+
+const chart = computeChart({
+  birthdate: '1990-04-16',
+  birthtime: '05:35',
+  timezone: 'Europe/Brussels',
+});
+
+chart.humanDesign.type;                       // "Manifesting Generator"
+chart.humanDesign.authority;                  // "Sacral"
+chart.humanDesign.profile;                    // "6/2"
+chart.humanDesign.definedCenters;             // ["throat","g","sacral", ...]
+chart.geneKeys.spheres.lifeswork;             // { gk: 13, line: 4, ... }
+chart.astrology.angles.ascendant.sign;        // "Aries"
+chart.astrology.angles.ascendant.degInSign;   // 25.3
+\`\`\`
+
+CLI:
+
+\`\`\`bash
+npx rave 1990-04-16 05:35 Europe/Brussels
+\`\`\`
+
+### 2. Online (REST API) — no API key, open CORS
+
+\`\`\`bash
+curl "https://rave-engine.netlify.app/api/chart?date=1990-04-16&time=05:35&tz=Europe/Brussels"
+\`\`\`
+
+| Endpoint          | Returns                                                     |
+| ----------------- | ----------------------------------------------------------- |
+| \`/api/chart\`      | Full chart — Gene Keys + Human Design + Astrology          |
+| \`/api/genekeys\`   | Gene Keys spheres only                                     |
+| \`/api/humandesign\` | Human Design bodygraph only                                |
+| \`/api/astrology\`  | Ascendant / MC / houses (needs lat/lng)                    |
+| \`/api/prompt\`     | A ready-to-paste AI interpretation prompt                  |
+| \`/api/timezones\`  | IANA timezone search (\`?q=bali\`)                            |
+
+Params: \`date=YYYY-MM-DD\`, \`time=HH:mm\`, \`tz=IANA\`, optional \`lat\`, \`lng\`, \`house=placidus|whole|equal\`.
+
+## Output shape (abridged)
+
+\`\`\`json
+{
+  "input": { "birthdate": "1990-04-16", "birthtime": "05:35", "timezone": "Europe/Brussels" },
+  "humanDesign": {
+    "type": "Manifesting Generator",
+    "authority": "Sacral",
+    "profile": "6/2",
+    "definedCenters": ["throat", "g", "sacral", "solarplexus", "root"],
+    "gateActivations": { "1": [{ "stream": "personality", "gate": 1, "line": 4 }], "...": "..." },
+    "centers": { "head": false, "ajna": false, "throat": true, "...": "..." }
+  },
+  "geneKeys": {
+    "spheres": {
+      "lifeswork": { "gk": 13, "line": 4 },
+      "evolution": { "gk": 7, "line": 3 },
+      "radiance":  { "gk": 2, "line": 5 },
+      "purpose":   { "gk": 32, "line": 1 },
+      "attraction":{ "gk": 9, "line": 6 },
+      "iq":        { "gk": 47, "line": 2 },
+      "eq":        { "gk": 6, "line": 5 },
+      "sq":        { "gk": 36, "line": 1 },
+      "core":      { "gk": 31, "line": 5 },
+      "culture":   { "gk": 8, "line": 1 },
+      "pearl":     { "gk": 4, "line": 6 }
+    }
+  },
+  "astrology": {
+    "angles": {
+      "ascendant": { "sign": "Aries", "degInSign": 25.3, "longitude": 25.3 },
+      "mc":        { "sign": "Capricorn", "degInSign": 12.7, "longitude": 282.7 }
+    },
+    "houses": { "cusps": [ { "house": 1, "longitude": 25.3 }, "..." ] }
+  }
+}
+\`\`\`
+
+## Links
+
+- npm: https://www.npmjs.com/package/rave-engine
+- GitHub: https://github.com/adamblvck/eventhorizon/tree/main/rave-engine
+- Live API + chart demo: https://rave-engine.netlify.app
+
+## Notes for LLMs
+
+- The engine is deterministic and local-first; given the same birth moment it always returns the same chart.
+- All calculations run in pure JavaScript — no external ephemeris files, no native dependencies.
+- Use the JSON shape above to read a chart: \`humanDesign\` for bodygraph facts (Type, Authority, Profile, defined centers, gate activations), \`geneKeys.spheres\` for the Hologenetic Profile, \`astrology\` for angles and houses.
+- For interpretation, call \`/api/prompt?date=...&time=...&tz=...\` to get a ready-to-paste prompt that includes the full chart.`;
+  const copyMd = $('#copyMarkdownBtn');
+  if (copyMd) copyMd.addEventListener('click', () => copy(LLM_MARKDOWN, 'Markdown doc copied — paste it into any LLM'));
+
   /* ---------- Sample fallback (when the API isn't reachable, e.g. static preview) ---------- */
-  const SAMPLE = {
-    input: { birthdate: '1972-08-02', birthtime: '14:30', timezone: 'Asia/Bangkok', birth_utc: '1972-08-02T07:30:00.000Z', location: { city: 'Bangkok', lat: 13.75, lng: 100.51 } },
-    geneKeys: { spheres: { lifeswork: { gk: 33, line: 3 }, evolution: { gk: 19, line: 3 }, radiance: { gk: 24, line: 5 }, purpose: { gk: 44, line: 5 }, iq: { gk: 12, line: 6 }, eq: { gk: 4, line: 4 }, pearl: { gk: 10, line: 2 }, relating: { gk: 4, line: 1 }, attraction: { gk: 11, line: 3 }, sq: { gk: 12, line: 3 }, core: { gk: 12, line: 1 }, culture: { gk: 58, line: 5 }, stability: { gk: 16, line: 1 }, creativity: { gk: 57, line: 1 } } },
-    humanDesign: { type: 'Manifesting Generator', authority: 'Sacral', profile: '3/5', definedCenters: ['head', 'ajna', 'throat', 'g', 'sacral', 'spleen'], openCenters: ['heart', 'solarplexus', 'root'] },
-    astrology: { angles: { ascendant: { sign: 'Sagittarius', degInSign: 9.99 }, mc: { sign: 'Virgo', degInSign: 12.65 } }, houses: { system: 'placidus' } },
-  };
+  const SAMPLE = window.SAMPLE_CHART || {};
   const ALL_CENTERS = ['head', 'ajna', 'throat', 'g', 'heart', 'sacral', 'solarplexus', 'spleen', 'root'];
 
-  /* ---------- Compute ---------- */
+  /* ---------- Shareable URL state ---------- */
   function buildQuery() {
     const p = new URLSearchParams();
     p.set('date', $('#date').value);
@@ -86,6 +256,27 @@
     if ($('#lat').value && $('#lng').value) { p.set('lat', $('#lat').value); p.set('lng', $('#lng').value); }
     return p.toString();
   }
+
+  // Prefill the form from the URL (?date=&time=&tz=&lat=&lng=) so links are shareable.
+  (function readParams() {
+    const q = new URLSearchParams(location.search);
+    if (q.get('date')) $('#date').value = q.get('date');
+    if (q.get('time')) $('#time').value = q.get('time');
+    if (q.get('tz')) $('#tz').value = q.get('tz');
+    if (q.get('lat')) $('#lat').value = q.get('lat');
+    if (q.get('lng')) $('#lng').value = q.get('lng');
+  })();
+
+  function shareUrl(qs) {
+    return location.origin + location.pathname + '?' + qs;
+  }
+  function copyShareLink() {
+    const qs = buildQuery();
+    try { history.replaceState(null, '', '?' + qs); } catch (e) {}
+    copy(shareUrl(qs), 'Chart link copied — share it anywhere');
+  }
+  $('#copyLinkBtn').addEventListener('click', copyShareLink);
+  $('#copyLinkBtn2').addEventListener('click', copyShareLink);
 
   function render(chart, qs) {
     const hd = chart.humanDesign || {};
@@ -111,10 +302,19 @@
     const base = location.origin && location.protocol.startsWith('http') ? location.origin : 'https://rave-engine.netlify.app';
     $('#endpointUrl').textContent = `/api/chart?${qs}`;
     $('#curlOut').textContent = `curl "${base}/api/chart?${qs}"`;
+    $('#copyJsonBtn').onclick = () => copy(JSON.stringify(chart, null, 2), 'Chart JSON copied');
+    $('#copyCurlBtn').onclick = () => copy(`curl "${base}/api/chart?${qs}"`, 'cURL command copied');
+
+    // Drawn charts (wheel, bodygraph, hologenetic profile)
+    if (window.RaveCharts) window.RaveCharts.renderAll(chart);
+    const note = $('#wheelNote');
+    if (note) note.textContent = chart.astrology ? '' : 'Add a location (or a city timezone) for houses & angles.';
   }
 
-  async function compute() {
+  async function compute(updateUrl) {
     const qs = buildQuery();
+    // Keep the address bar shareable, but don't stamp params on a clean first load.
+    if (updateUrl || location.search) { try { history.replaceState(null, '', '?' + qs); } catch (e) {} }
     const btn = $('#computeBtn');
     btn.textContent = '✦ Computing…';
     btn.disabled = true;
@@ -142,7 +342,7 @@
     }
   }
 
-  $('#computeBtn').addEventListener('click', compute);
-  // Compute once on load so the panel is alive.
-  compute();
+  $('#computeBtn').addEventListener('click', () => compute(true));
+  // Compute once on load so the panel (and the drawn charts) are alive.
+  compute(false);
 })();

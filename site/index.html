@@ -3,27 +3,103 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rave-engine — Gene Keys, Human Design & Astrology, computed locally</title>
-  <meta name="description" content="A free, local-only API for Gene Keys, Human Design and Astrology. Pure-JS, no data leaves your machine. A free connector to your AI and a body of work to start interpreting your profiles." />
-  <meta property="og:title" content="rave-engine — your inner cosmos, computed locally" />
-  <meta property="og:description" content="Free Gene Keys + Human Design + Astrology API. Local-only calculation, AI connector, and a path into the teaching." />
+  <title>Rave Engine — Free Human Design API, Gene Keys API &amp; Astrology API</title>
+  <meta name="description" content="Rave Engine is a free, open-source Human Design API, Gene Keys API and Astrology API. Pure JavaScript, local-only calculation — cast your bodygraph, hologenetic profile and natal chart without your birth data ever leaving your machine." />
+  <meta name="keywords" content="human design api, gene keys api, astrology api, free human design chart, bodygraph calculator, hologenetic profile, gene keys calculator, human design calculator, natal chart api, i ching astrology, rave chart" />
+  <link rel="canonical" href="https://rave-engine.netlify.app/" />
+  <meta property="og:title" content="Rave Engine — Free Human Design, Gene Keys &amp; Astrology API" />
+  <meta property="og:description" content="Cast Human Design bodygraphs, Gene Keys hologenetic profiles and astrology charts with one free, local-only API. Pure JS, MIT licensed, AI-ready." />
   <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://rave-engine.netlify.app/" />
+  <meta property="og:site_name" content="Rave Engine" />
+  <meta property="og:image" content="https://rave-engine.netlify.app/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Rave Engine — Free Human Design, Gene Keys &amp; Astrology API" />
+  <meta name="twitter:description" content="A free, local-only Human Design API, Gene Keys API and Astrology API. Pure JavaScript. Your birth data never leaves your machine." />
+  <meta name="twitter:image" content="https://rave-engine.netlify.app/og.png" />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="preload" href="fonts/astrodot.ttf" as="font" type="font/ttf" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,600&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "name": "Rave Engine",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any",
+        "description": "A free, open-source Human Design API, Gene Keys API and Astrology API. Pure JavaScript, local-only calculation of bodygraphs, hologenetic profiles and natal charts.",
+        "url": "https://rave-engine.netlify.app/",
+        "downloadUrl": "https://www.npmjs.com/package/rave-engine",
+        "license": "https://opensource.org/licenses/MIT",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "author": { "@type": "Person", "name": "Adam Blvck", "url": "https://blvckstudios.com" }
+      },
+      {
+        "@type": "WebAPI",
+        "name": "Rave Engine API",
+        "description": "Free REST API for Human Design charts, Gene Keys hologenetic profiles and astrology houses & angles. Plain GET endpoints, open CORS, no API key.",
+        "documentation": "https://rave-engine.netlify.app/#api",
+        "termsOfService": "https://github.com/adamblvck/eventhorizon/blob/main/rave-engine/LICENSE",
+        "provider": { "@type": "Person", "name": "Adam Blvck" }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is there a free Human Design API?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes — Rave Engine is a free, open-source Human Design API. One GET request to /api/humandesign returns the full bodygraph: activated gates, defined channels, defined and open centers, Type, Authority and Profile. No API key, open CORS, MIT licensed." }
+          },
+          {
+            "@type": "Question",
+            "name": "Is there a free Gene Keys API?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes — /api/genekeys returns the complete Gene Keys hologenetic profile: the gene key and line for every sphere, from Life's Work and Evolution to the Pearl. It is the same calculation used by Gene Keys chart tools, free and open source." }
+          },
+          {
+            "@type": "Question",
+            "name": "How accurate are the calculations?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Rave Engine computes planetary positions with the astronomia VSOP87 ephemeris and is validated to the exact gate and line against Swiss Ephemeris reference charts. Houses and angles support Placidus, Whole-Sign and Equal systems." }
+          },
+          {
+            "@type": "Question",
+            "name": "Does my birth data stay private?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. The engine is pure JavaScript and runs entirely on your machine — npm install rave-engine and nothing about your birth ever leaves your computer. The hosted API is stateless and stores nothing." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I use it with ChatGPT, Claude or another AI?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes — simply point your AI engine to our URL, share your birthdata, and the AI will know what to do to obtain legitimate birthchart coordinates. Working with offline or private AI's? You can use /api/prompt returns a ready-to-paste interpretation prompt containing your full chart, so any AI can read your Human Design and Gene Keys profile and walk you into the teaching." }
+          },
+          {
+            "@type": "Question",
+            "name": "How do I install the Human Design / Gene Keys calculator for my app or website?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Run npm install rave-engine, then call computeChart({ birthdate, birthtime, timezone }) — it returns Gene Keys, Human Design and Astrology in one JSON. A CLI (npx rave) is included. See documentation for more details." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
+  <!-- Ambient glyph field (animated planetary glyphs) -->
+  <div class="glyph-field" id="glyphField" aria-hidden="true"></div>
+
   <!-- ===== Nav ===== -->
   <nav class="nav">
     <div class="container nav-inner">
       <a class="brand" href="#top">
         <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><use href="#hexmark" /></svg>
-        rave-engine
+        <span class="brand-word">Rave <span class="brand-accent">Engine</span></span>
       </a>
       <div class="nav-links">
         <a href="#demo">Live API</a>
+        <a href="#charts">Charts</a>
         <a href="#api">Docs</a>
         <a href="https://www.npmjs.com/package/rave-engine" target="_blank" rel="noopener">npm</a>
         <a class="nav-cta" href="https://github.com/adamblvck/eventhorizon/tree/main/rave-engine" target="_blank" rel="noopener">GitHub</a>
@@ -38,14 +114,25 @@
 
   <!-- ===== Hero ===== -->
   <header class="hero">
-    <svg class="hero-ring" viewBox="0 0 600 600" aria-hidden="true"><use href="#mandala" /></svg>
+    <svg class="hero-ring" viewBox="0 0 600 600" aria-hidden="true">
+      <g class="ring-outer">
+        <circle cx="300" cy="300" r="298" class="hr-c" />
+        <g id="heroOuterTicks" class="hr-t"></g>
+        <g id="heroZodiac"></g>
+      </g>
+      <circle cx="300" cy="300" r="250" class="hr-c hr-static" />
+      <g class="ring-inner">
+        <circle cx="300" cy="300" r="210" class="hr-c" />
+        <g id="heroInnerTicks" class="hr-t"></g>
+      </g>
+    </svg>
     <div class="container">
       <div class="eyebrow">Gene Keys · Human Design · Astrology</div>
-      <h1>Read the body of <span class="grad">your design.</span></h1>
+      <h1>Open Source and Private<br/><span class="grad">Human Design, Gene Keys & Astrology API</span></h1>
       <p class="tagline">
-        Gene&nbsp;Keys–certified, <strong>local-only</strong> calculation. A free API, a free
-        connector to your AI, and a free body of work — so you can start interpreting your
-        profiles and step into the teaching.
+        Gene&nbsp;Keys–Certified, <strong>local-only</strong> astrological calculations. A free Human&nbsp;Design,
+        Gene&nbsp;Keys &amp; Astrology API, a free connector to your AI, app or website,
+        so you can start playing with heavenly coordinates to anchor purpose and meaning.
       </p>
       <div class="hero-cta">
         <a href="#demo" class="btn btn-primary">Try the live API ↓</a>
@@ -96,6 +183,7 @@
             </div>
           </div>
           <button class="btn btn-primary" id="computeBtn" style="width:100%; justify-content:center;">✦ Compute chart</button>
+          <button class="btn" id="copyLinkBtn" style="width:100%; justify-content:center; margin-top:10px;" title="Copy a shareable link to this chart">🔗 Copy link to this chart</button>
         </div>
 
         <!-- Results -->
@@ -120,16 +208,67 @@
             <div class="spheres" id="s-spheres"></div>
             <div style="font-size:0.78rem; color:var(--muted); margin:16px 0 6px;">Astrology</div>
             <div class="centers" id="s-astro"></div>
+            <div class="copy-row">
+              <button class="btn" id="copyLinkBtn2">🔗 Copy link</button>
+            </div>
           </div>
 
-          <div class="tab-panel" id="panel-json"><pre class="code" id="jsonOut">…</pre></div>
-          <div class="tab-panel" id="panel-curl"><pre class="code" id="curlOut">…</pre></div>
+          <div class="tab-panel" id="panel-json">
+            <pre class="code" id="jsonOut">…</pre>
+            <div class="copy-row"><button class="btn" id="copyJsonBtn">Copy JSON</button></div>
+          </div>
+          <div class="tab-panel" id="panel-curl">
+            <pre class="code" id="curlOut">…</pre>
+            <div class="copy-row"><button class="btn" id="copyCurlBtn">Copy cURL</button></div>
+          </div>
           <div class="tab-panel" id="panel-prompt">
             <pre class="code" id="promptOut">Click “Compute chart”, then copy a ready-to-paste prompt for your AI.</pre>
             <div class="copy-row">
               <button class="btn" id="copyPromptBtn">Copy AI prompt</button>
               <a class="btn btn-ghost" id="openChatGpt" target="_blank" rel="noopener">Open in ChatGPT ↗</a>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Drawn charts ===== -->
+  <section id="charts">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">The engine, drawn</div>
+        <h2>Three charts, one moment</h2>
+        <p>The same birth moment rendered three ways — an astrology wheel, a Human&nbsp;Design bodygraph, and the Gene&nbsp;Keys hologenetic profile. Cast a chart above and watch them redraw.</p>
+      </div>
+      <div class="chart-tabs" role="tablist">
+        <button class="chart-tab active" data-chart="astrology" role="tab">☉ Astrology</button>
+        <button class="chart-tab" data-chart="bodygraph" role="tab">▽ Human Design</button>
+        <button class="chart-tab" data-chart="genekeys" role="tab">◉ Gene Keys</button>
+      </div>
+      <div class="card chart-stage">
+        <div class="chart-panel active" id="chart-astrology">
+          <svg id="wheelSvg" viewBox="0 0 640 640" role="img" aria-label="Astrology wheel with personality and design planets"></svg>
+          <div class="chart-legend">
+            <span><i class="sw sw-p"></i> Personality — natal planets</span>
+            <span><i class="sw sw-d"></i> Design — 88° solar arc before birth <b class="sw-star">✳</b></span>
+            <span class="legend-note" id="wheelNote"></span>
+          </div>
+        </div>
+        <div class="chart-panel" id="chart-bodygraph">
+          <svg id="bodygraphSvg" viewBox="0 -24 800 862" role="img" aria-label="Human Design bodygraph with nine centers and defined channels"></svg>
+          <div class="chart-legend">
+            <span><i class="sw sw-p"></i> Personality</span>
+            <span><i class="sw sw-d"></i> Design</span>
+            <span><i class="sw sw-def"></i> Defined center</span>
+          </div>
+        </div>
+        <div class="chart-panel" id="chart-genekeys">
+          <svg id="genekeysSvg" viewBox="0 0 640 790" role="img" aria-label="Gene Keys hologenetic profile spheres"></svg>
+          <div class="chart-legend">
+            <span><i class="sw sw-act"></i> Activation</span>
+            <span><i class="sw sw-ven"></i> Venus</span>
+            <span><i class="sw sw-pea"></i> Pearl</span>
           </div>
         </div>
       </div>
@@ -146,32 +285,44 @@
       </div>
       <div class="features">
         <div class="feature">
-          <div class="ficon">🧬</div>
+          <div class="ficon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          </div>
           <h3>Gene Keys</h3>
           <p>The full Hologenetic Profile — gene key and line for every sphere, from Life's Work to your Pearl.</p>
         </div>
         <div class="feature">
-          <div class="ficon">⚡</div>
+          <div class="ficon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
           <h3>Human Design</h3>
           <p>Activated gates, defined channels, defined &amp; open centers, plus Type, Authority and Profile — the whole bodygraph.</p>
         </div>
         <div class="feature">
-          <div class="ficon">🪐</div>
+          <div class="ficon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
+          </div>
           <h3>Astrology</h3>
           <p>Ascendant, Descendant, MC and IC with Placidus, Whole-Sign or Equal houses — from a location or just your timezone.</p>
         </div>
         <div class="feature">
-          <div class="ficon">🔒</div>
+          <div class="ficon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
           <h3>Local-only</h3>
           <p>Pure JavaScript, no native build, no ephemeris files. Nothing about your birth ever leaves the machine.</p>
         </div>
         <div class="feature">
-          <div class="ficon">🤖</div>
+          <div class="ficon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+          </div>
           <h3>AI connector</h3>
           <p>One call returns a ready-to-paste prompt so any AI can interpret your design and walk you into the teaching.</p>
         </div>
         <div class="feature">
-          <div class="ficon">✦</div>
+          <div class="ficon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"/></svg>
+          </div>
           <h3>Free &amp; open</h3>
           <p>MIT licensed, free API, free npm package. Validated to the exact gate.line against Swiss Ephemeris.</p>
         </div>
@@ -183,29 +334,110 @@
   <section id="api">
     <div class="container">
       <div class="section-head">
-        <div class="eyebrow">Free API</div>
-        <h2>A slash and a query string</h2>
-        <p>Every endpoint is a plain <code>GET</code>. CORS is open — call it from a browser, a notebook, or your AI.</p>
+        <div class="eyebrow">Docs</div>
+        <h2>Use it online or offline</h2>
+        <p>Two ways to use Rave Engine — a free hosted REST API for quick online calls, or the npm package for fully local, private computation. Both return the same JSON.</p>
       </div>
-      <div class="card" style="padding:6px 6px 0;">
-        <table class="api-table">
-          <thead><tr><th>Endpoint</th><th>Returns</th></tr></thead>
-          <tbody>
-            <tr><td class="path">/api/chart</td><td>Full chart — Gene Keys + Human Design + Astrology</td></tr>
-            <tr><td class="path">/api/genekeys</td><td>Gene Keys spheres only</td></tr>
-            <tr><td class="path">/api/humandesign</td><td>Human Design bodygraph only</td></tr>
-            <tr><td class="path">/api/astrology</td><td>Ascendant / MC / houses (needs a location)</td></tr>
-            <tr><td class="path">/api/prompt</td><td>A ready-to-paste AI interpretation prompt</td></tr>
-            <tr><td class="path">/api/timezones</td><td>IANA timezone search (<code>?q=bali</code>)</td></tr>
-          </tbody>
-        </table>
+      <div class="docs-tabs" role="tablist">
+        <button class="docs-tab active" data-docs="rest" role="tab">REST API</button>
+        <button class="docs-tab" data-docs="js" role="tab">JavaScript / npm</button>
       </div>
-      <p class="muted" style="font-family:var(--mono); font-size:0.84rem; margin-top:18px;">
-        Params: <b style="color:var(--accent)">date</b>=YYYY-MM-DD &nbsp;
-        <b style="color:var(--accent)">time</b>=HH:mm &nbsp;
-        <b style="color:var(--accent)">tz</b>=IANA &nbsp;
-        [<b style="color:var(--accent)">lat</b> <b style="color:var(--accent)">lng</b> <b style="color:var(--accent)">house</b>=placidus|whole|equal]
-      </p>
+
+      <div class="docs-panel active" id="docs-rest">
+        <div class="card" style="padding:6px 6px 0;">
+          <table class="api-table">
+            <thead><tr><th>Endpoint</th><th>Returns</th></tr></thead>
+            <tbody>
+              <tr><td class="path">/api/chart</td><td>Full chart — Gene Keys + Human Design + Astrology</td></tr>
+              <tr><td class="path">/api/genekeys</td><td>Gene Keys spheres only</td></tr>
+              <tr><td class="path">/api/humandesign</td><td>Human Design bodygraph only</td></tr>
+              <tr><td class="path">/api/astrology</td><td>Ascendant / MC / houses (needs a location)</td></tr>
+              <tr><td class="path">/api/prompt</td><td>A ready-to-paste AI interpretation prompt</td></tr>
+              <tr><td class="path">/api/timezones</td><td>IANA timezone search (<code>?q=bali</code>)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="muted" style="font-family:var(--mono); font-size:0.84rem; margin-top:18px;">
+          Params: <b style="color:var(--accent)">date</b>=YYYY-MM-DD &nbsp;
+          <b style="color:var(--accent)">time</b>=HH:mm &nbsp;
+          <b style="color:var(--accent)">tz</b>=IANA &nbsp;
+          [<b style="color:var(--accent)">lat</b> <b style="color:var(--accent)">lng</b> <b style="color:var(--accent)">house</b>=placidus|whole|equal]
+        </p>
+      </div>
+
+      <div class="docs-panel" id="docs-js">
+        <div class="card js-docs">
+          <p class="js-docs-intro">Install the npm package and compute charts in pure JavaScript — no native build, no ephemeris files, your birth data never leaves your machine.</p>
+
+          <div class="code-block">
+            <div class="code-block-head"><span>Install</span><button class="copy-mini" data-copy="npm install rave-engine">Copy</button></div>
+            <pre class="code">npm install rave-engine</pre>
+          </div>
+
+          <div class="code-block">
+            <div class="code-block-head"><span>Usage</span><button class="copy-mini" id="copyUsageBtn">Copy</button></div>
+<pre class="code">const { computeChart } = require('rave-engine');
+
+const chart = computeChart({
+  birthdate: '1990-04-16',
+  birthtime: '05:35',
+  timezone: 'Europe/Brussels',
+});
+
+console.log(chart.humanDesign.type);             // "Manifesting Generator"
+console.log(chart.humanDesign.profile);          // "6/2"
+console.log(chart.geneKeys.spheres.lifeswork.gk); // 13
+console.log(chart.astrology.angles.ascendant.sign); // "Aries"</pre>
+          </div>
+
+          <div class="code-block">
+            <div class="code-block-head"><span>CLI</span><button class="copy-mini" data-copy="npx rave 1990-04-16 05:35 Europe/Brussels">Copy</button></div>
+            <pre class="code">npx rave 1990-04-16 05:35 Europe/Brussels</pre>
+          </div>
+
+          <div class="js-docs-footer">
+            <a class="btn btn-ghost" href="https://github.com/adamblvck/eventhorizon/tree/main/rave-engine" target="_blank" rel="noopener">Full docs on GitHub ↗</a>
+            <button class="btn btn-primary" id="copyMarkdownBtn">Copy markdown for LLM use</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section id="faq">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">Questions</div>
+        <h2>Frequently asked</h2>
+        <p>Everything people ask before they cast their first chart.</p>
+      </div>
+      <div class="faq-list">
+        <details>
+          <summary>Is there a free Human Design API?</summary>
+          <p>Yes — Rave Engine is a free, open-source <strong>Human Design API</strong>. One GET request to <code>/api/humandesign</code> returns the full bodygraph: activated gates, defined channels, defined and open centers, Type, Authority and Profile. No API key, open CORS, MIT licensed.</p>
+        </details>
+        <details>
+          <summary>Is there a free Gene Keys API?</summary>
+          <p>Yes — <code>/api/genekeys</code> returns the complete <strong>Gene Keys hologenetic profile</strong>: the gene key and line for every sphere, from Life's Work and Evolution to the Pearl. Free and open source.</p>
+        </details>
+        <details>
+          <summary>How accurate are the calculations?</summary>
+          <p>Planetary positions come from the astronomia VSOP87 ephemeris and are validated to the exact <em>gate.line</em> against Swiss Ephemeris reference charts. Houses and angles support Placidus, Whole-Sign and Equal systems.</p>
+        </details>
+        <details>
+          <summary>Does my birth data stay private?</summary>
+          <p>Yes. The engine is pure JavaScript and runs entirely on your machine — <code>npm install rave-engine</code> and nothing about your birth ever leaves your computer. The hosted API is stateless and stores nothing.</p>
+        </details>
+        <details>
+          <summary>Can I use it with ChatGPT, Claude or another AI?</summary>
+          <p>Yes — <code>/api/prompt</code> returns a ready-to-paste interpretation prompt containing your full chart, so any AI can read your Human Design and Gene Keys profile and walk you into the teaching.</p>
+        </details>
+        <details>
+          <summary>How do I install it?</summary>
+          <p><code>npm install rave-engine</code>, then <code>computeChart({ birthdate, birthtime, timezone })</code> returns Gene Keys, Human Design and Astrology in one JSON. A CLI is included: <code>npx rave 1990-04-16 05:35 Europe/Brussels</code>.</p>
+        </details>
+      </div>
     </div>
   </section>
 
@@ -215,7 +447,7 @@
       <div class="card">
         <div class="eyebrow">Into the teaching</div>
         <blockquote>“The calculation is only the doorway. The contemplation is the path.”</blockquote>
-        <p class="muted">rave-engine gives you the map for free — your Gene Keys, your Human Design, your stars — so you can spend your energy where it matters: living the experiment and contemplating the keys.</p>
+        <p class="muted">Rave Engine gives you the map for free — your Gene Keys, your Human Design, your stars — so you can spend your energy where it matters: living the experiment and contemplating the keys.</p>
         <div class="hero-cta" style="margin-top:22px;">
           <a href="#demo" class="btn btn-primary">Cast your chart</a>
           <a href="https://genekeys.com" target="_blank" rel="noopener" class="btn btn-ghost">Explore the Gene Keys ↗</a>
@@ -229,7 +461,7 @@
     <div class="container footer-inner">
       <div class="brand" style="font-size:1.05rem;">
         <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><use href="#hexmark" /></svg>
-        rave-engine
+        <span class="brand-word">Rave <span class="brand-accent">Engine</span></span>
       </div>
       <div class="footer-links">
         <a href="https://www.npmjs.com/package/rave-engine" target="_blank" rel="noopener">npm</a>
@@ -243,7 +475,7 @@
 
   <div class="toast" id="toast"></div>
 
-  <!-- ===== SVG defs (mark + mandala) ===== -->
+  <!-- ===== SVG defs (mark) ===== -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <defs>
       <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
@@ -260,16 +492,11 @@
           <line x1="9" y1="21" x2="14" y2="21" /><line x1="18" y1="21" x2="23" y2="21" />
         </g>
       </g>
-      <!-- Faint mandala ring for the hero backdrop -->
-      <g id="mandala" fill="none" stroke="url(#g1)" stroke-width="0.8" opacity="0.55">
-        <circle cx="300" cy="300" r="298" />
-        <circle cx="300" cy="300" r="250" />
-        <circle cx="300" cy="300" r="210" />
-        <g id="spokes"></g>
-      </g>
     </defs>
   </svg>
 
+  <script src="sample-chart.js"></script>
+  <script src="charts.min.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
