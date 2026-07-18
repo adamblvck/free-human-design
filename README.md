@@ -1,15 +1,17 @@
-# rave-engine
+# Free Human Design API
 
-[![npm version](https://img.shields.io/npm/v/rave-engine.svg)](https://www.npmjs.com/package/rave-engine)
+> npm package: [`free-human-design`](https://www.npmjs.com/package/free-human-design) · live site: [freehumandesign.netlify.app](https://freehumandesign.netlify.app)
+
+[![npm version](https://img.shields.io/npm/v/free-human-design.svg)](https://www.npmjs.com/package/free-human-design)
 [![coverage](https://img.shields.io/badge/coverage-90%25-brightgreen.svg)](#tests)
 [![tests](https://img.shields.io/badge/tests-216%20passing-brightgreen.svg)](#tests)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![node](https://img.shields.io/badge/node-%3E%3D16-brightgreen.svg)](package.json)
 [![dependencies](https://img.shields.io/badge/native%20build-none-brightgreen.svg)](#accuracy--precision)
 
-**A pure-JavaScript Human Design & Gene Keys engine — with extended astrology - from the maintainer of official Gene Keys Profiler and Event Horizon Election Engine, and Gene Key's Integral Human Design.**
+**The free Human Design API & Gene Keys API — the most tested, most accurate, pure-JavaScript engine of its kind, with extended astrology. From the maintainer of the official Gene Keys Profiler and Event Horizon Election Engine, and Gene Key's Integral Human Design.**
 
-From a birth date, time and timezone (and an optional location), `rave-engine`
+From a birth date, time and timezone (and an optional location), `free-human-design`
 computes:
 
 - 🧬 **Gene Keys** — the gene key (hexagram) + line for every sphere of the
@@ -31,7 +33,7 @@ theory), validated to the exact gate/line against Swiss Ephemeris.
 </p>
 
 ```bash
-npm install rave-engine
+npm install free-human-design
 ```
 
 ---
@@ -39,7 +41,7 @@ npm install rave-engine
 ## Quickstart
 
 ```js
-const { computeChart } = require('rave-engine');
+const { computeChart } = require('free-human-design');
 
 const chart = computeChart({
   birthdate: '1972-08-02',   // YYYY-MM-DD (or YYYY-M-D)
@@ -115,16 +117,16 @@ computes — astrology is the only part that needs a place of birth).
 
 ## 🌐 Free API & live site
 
-**[rave-engine.netlify.app](https://rave-engine.netlify.app)** — a free, local-only
+**[freehumandesign.netlify.app](https://freehumandesign.netlify.app)** — a free, local-only
 API and an in-browser playground. Every endpoint is a plain `GET` with open CORS,
 so you can call it from a browser, a notebook, or hand it straight to an AI.
 
 <p align="center">
-  <img src="assets/site-demo.png" alt="The rave-engine landing page with the live in-browser API demo computing a chart" width="760">
+  <img src="assets/site-demo.png" alt="The Free Human Design API landing page with the live in-browser API demo computing a chart" width="760">
 </p>
 
 ```bash
-curl "https://rave-engine.netlify.app/api/chart?date=1972-08-02&time=14:30&tz=Asia/Bangkok"
+curl "https://freehumandesign.netlify.app/api/chart?date=1972-08-02&time=14:30&tz=Asia/Bangkok"
 ```
 
 | Endpoint | Returns |
@@ -133,16 +135,17 @@ curl "https://rave-engine.netlify.app/api/chart?date=1972-08-02&time=14:30&tz=As
 | `/api/genekeys` | Gene Keys spheres |
 | `/api/humandesign` | Human Design bodygraph |
 | `/api/astrology` | Ascendant / MC / houses |
+| `/api/midpoints` | Advanced — the [midpoint matrix](#-midpoints-advanced) over the 26 activations |
 | `/api/prompt` | A ready-to-paste **AI interpretation prompt** |
 | `/api/timezones?q=bali` | IANA timezone search |
 
-Params: `date=YYYY-MM-DD` · `time=HH:mm` · `tz=IANA` · `[lat lng house=placidus|whole|equal]`
+Params: `date=YYYY-MM-DD` · `time=HH:mm` · `tz=IANA` · `[lat lng house=placidus|whole|equal midpoints=1]`
 
 Dark and light, fully responsive:
 
 | Dark | Light |
 | --- | --- |
-| <img src="assets/site-hero.png" alt="rave-engine landing page, dark mode" width="380"> | <img src="assets/site-hero-light.png" alt="rave-engine landing page, light mode" width="380"> |
+| <img src="assets/site-hero.png" alt="Free Human Design API landing page, dark mode" width="380"> | <img src="assets/site-hero-light.png" alt="Free Human Design API landing page, light mode" width="380"> |
 
 The site and API live in [`site/`](site) and [`netlify/functions/`](netlify/functions);
 the deploy config is [`netlify.toml`](netlify.toml). Nothing about a birth ever
@@ -179,7 +182,7 @@ North/South Node, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto)
 at both the Personality and Design moments:
 
 ```js
-const { computeChart } = require('rave-engine');
+const { computeChart } = require('free-human-design');
 const hd = computeChart({ birthdate: '1972-08-02', birthtime: '14:30', timezone: 'Asia/Bangkok' }).humanDesign;
 
 hd.activatedGates;   // [4, 10, 11, … ]  — every gate lit by a planet
@@ -195,13 +198,13 @@ Reference data (gate→center map and the 36 channels) is the standard Human
 Design bodygraph and is exported for your own use:
 
 ```js
-const { GATE_CENTER, CHANNELS, CENTERS, computeBodygraph } = require('rave-engine');
+const { GATE_CENTER, CHANNELS, CENTERS, computeBodygraph } = require('free-human-design');
 ```
 
 ### 🪐 Astrology (angles & houses)
 
 ```js
-const { computeAngles, computeHouses } = require('rave-engine');
+const { computeAngles, computeHouses } = require('free-human-design');
 
 const angles = computeAngles({ jdUT: 2441531.8125, lat: 13.75, lng: 100.5 });
 // { ascendant, descendant, mc, ic }  — each with longitude, sign, degInSign, gateLine
@@ -216,6 +219,48 @@ undefined.
 
 ---
 
+## ✳ Midpoints (advanced)
+
+A **midpoint** is the point on the ecliptic exactly halfway between two bodies,
+along the *shorter* of the two arcs joining them (the astrological convention):
+
+```
+midpoint(a, b) = normalize(a + signedAngleDiff(b, a) / 2)
+```
+
+Each midpoint is mapped back onto the Gene Keys wheel (`gate.line`) like any other
+point. Midpoints are **opt-in** — off by default (the matrix is O(n²)):
+
+```js
+const { computeChart, computeMidpoints } = require('free-human-design');
+
+const chart = computeChart({
+  birthdate: '1992-12-09', birthtime: '00:35', timezone: 'Europe/Brussels',
+  midpoints: true,                       // ← attaches chart.humanDesign.midpoints
+});
+
+chart.humanDesign.midpoints._meta;       // { count: 26, pairCount: 325, method: 'shortest-arc' }
+chart.humanDesign.midpoints.pairs[0];    // { a: 'p_sun', b: 'p_earth', longitude, gate, line, color }
+chart.humanDesign.midpoints.matrix;      // 26×26, symmetric, null diagonal
+
+// Or feed it any labelled points yourself:
+computeMidpoints([{ key: 'asc', longitude: 25.3 }, { key: 'mc', longitude: 282.7 }]);
+```
+
+The point set is the **26 Human Design activations** (13 bodies × Personality +
+Design), keyed `p_<body>` / `d_<body>`, giving `26·25/2 = 325` pairs. Over REST:
+
+```bash
+curl "https://freehumandesign.netlify.app/api/chart?date=1992-12-09&time=00:35&tz=Europe/Brussels&midpoints=1"
+curl "https://freehumandesign.netlify.app/api/midpoints?date=1992-12-09&time=00:35&tz=Europe/Brussels"
+```
+
+The live site's astrology wheel has a **✳ Midpoints** toggle that overlays all 325
+midpoints as a ring. Generate a standalone HTML view (crossings + matrix + toggle)
+with [`scripts/gen-crossings.js`](scripts/gen-crossings.js).
+
+---
+
 ## Location
 
 The astrology section needs a **place of birth**. You have two options:
@@ -224,7 +269,7 @@ The astrology section needs a **place of birth**. You have two options:
    ```js
    computeChart({ /* … */ location: { lat: 13.7563, lng: 100.5018 } });
    ```
-2. **Just the timezone** — `rave-engine` derives a representative location from
+2. **Just the timezone** — `free-human-design` derives a representative location from
    the most-populous city in that timezone, which is plenty for an Ascendant:
    ```js
    computeChart({ birthdate, birthtime, timezone: 'Asia/Bangkok' });
@@ -253,7 +298,7 @@ Time. These are regression-locked in
 ### Timezone autocomplete
 
 ```js
-const { searchTimezones, locationForTimezone } = require('rave-engine');
+const { searchTimezones, locationForTimezone } = require('free-human-design');
 
 searchTimezones('bali');   // → [{ ianaName: 'Asia/Makassar', mainCity: 'Makassar', … }]
 searchTimezones('tokyo');  // → [{ ianaName: 'Asia/Tokyo', currentOffsetMinutes: 540, … }]
@@ -266,17 +311,17 @@ locationForTimezone('Europe/London'); // → { lat: 51.5, lng: -0.12, city: 'Lon
 
 ```bash
 # Full chart (readable summary)
-npx rave --chart --date 1972-08-02 --time 14:30 --tz Asia/Bangkok
+npx free-human-design --chart --date 1972-08-02 --time 14:30 --tz Asia/Bangkok
 
 # With explicit coordinates and a house system, as JSON
-npx rave --chart --date 1972-08-02 --time 14:30 --tz Asia/Bangkok \
+npx free-human-design --chart --date 1972-08-02 --time 14:30 --tz Asia/Bangkok \
   --lat 13.75 --lng 100.5 --house whole --json
 
 # Classic profile (p_/d_ + spheres)
-npx rave --date 1972-08-02 --time 14:30 --tz Asia/Bangkok
+npx free-human-design --date 1972-08-02 --time 14:30 --tz Asia/Bangkok
 
 # Timezone search
-npx rave --tz-search bali
+npx free-human-design --tz-search bali
 ```
 
 ---
@@ -296,6 +341,88 @@ calculators). See [`test/reference-charts.test.js`](test/reference-charts.test.j
 Lunar nodes use the **true node** (oscillating), matching mainstream Human
 Design calculators.
 
+### Deviation study vs the official Gene Keys engine
+
+The pure-JS heuristic was benchmarked against the **official Swiss-Ephemeris Gene
+Keys engine** (`genekeysExperimentalV2`, the one the Hologenetic Profiler uses)
+across **2,000 births spanning 1600–2200 AD** and 30 timezones — 52,000 body
+placements compared, binned by 20-year era
+([`scripts/deviation-study.js`](scripts/deviation-study.js)). Δ is the shortest
+angular distance between the two ecliptic longitudes (1° = 60′).
+
+**Test method.** For each of 2,000 deterministically-seeded births (random
+month/day/time, a real IANA timezone + its city coordinates), the same local
+time + timezone is sent to *both* engines. free-human-design places the 13 Human Design
+bodies × 2 streams locally; the official engine is asked over HTTP; the two
+ecliptic longitudes are compared body-by-body (Δ in arcminutes, plus gate/line
+agreement), then aggregated into 20-year buckets. Every official response is
+cached to `scripts/data/`, so the run is resumable and the reports re-render
+offline. The comparison math is unit-tested against a committed real-API fixture
+([`test/deviation-sample.test.js`](test/deviation-sample.test.js)) — no network in CI.
+
+**Headline — the Gene Keys profile spheres.** A Hologenetic Profile only ever
+reads **14 spheres** (Life's Work, Evolution, Radiance, Purpose, Relating, IQ, EQ,
+Pearl, Attraction, SQ, Core, Culture, Core Stability, Creativity). Those spheres
+never touch **Pluto, Neptune, or the lunar nodes** — the three bodies that dominate
+the deviation — so a real profile is far tighter than the raw all-body figure
+(28,000 sphere activations compared):
+
+| Metric | **Gene Keys spheres** | All 26 bodies |
+| --- | --- | --- |
+| Median Δ | **0.01′** (≈ 0.6″) | 0.02′ |
+| p95 Δ | **0.17′** | 10.8′ |
+| max Δ | **0.78′** | 74.8′ |
+| **Gate** agreement | **99.4%** | 98.8% |
+| **Line** agreement | **95.6%** | 92.6% |
+
+Every sphere agrees on the gate **99.0–99.7%** of the time and stays **sub-arcminute
+at p95** across all 600 years — the largest is the Moon-based **Attraction** sphere
+at 0.56′, still well under a tenth of a Gene Keys line. Per sphere, all eras:
+
+| Sphere | Body | Median Δ′ | p95 Δ′ | Gate% | Line% |
+| --- | --- | --- | --- | --- | --- |
+| Life's Work | p_sun | 0.01 | 0.02 | 99.5% | 95.2% |
+| Evolution | p_earth | 0.01 | 0.02 | 99.5% | 95.2% |
+| Radiance | d_sun | 0.02 | 0.04 | 99.3% | 96.1% |
+| Purpose | d_earth | 0.02 | 0.04 | 99.3% | 96.1% |
+| Relating | p_mercury | 0.01 | 0.02 | 99.4% | 96.3% |
+| IQ | p_venus | 0.01 | 0.02 | 99.5% | 95.7% |
+| EQ | p_mars | 0.01 | 0.02 | 99.3% | 96.0% |
+| Pearl | p_jupiter | 0.01 | 0.02 | 99.0% | 96.0% |
+| Attraction | d_moon | 0.27 | 0.56 | 99.7% | 95.3% |
+| SQ | d_venus | 0.02 | 0.05 | 99.6% | 94.8% |
+| Core | d_mars | 0.01 | 0.03 | 99.3% | 95.2% |
+| Culture | d_jupiter | 0.01 | 0.02 | 99.3% | 95.8% |
+| Core Stability | d_saturn | 0.01 | 0.03 | 99.5% | 95.6% |
+| Creativity | d_uranus | 0.01 | 0.07 | 99.5% | 95.3% |
+
+**All 26 activations (diagnostic).** Including the bodies a profile ignores, the
+overall median Δ is **0.02′**, p95 10.8′, gate agreement **98.8%**. The tail is
+dominated by **Pluto** (median 20.9′ — its multi-century orbit is the hardest to
+approximate) and, distantly, the lunar nodes. The Δ grows toward the window
+extremes (pre-1800 and post-2100), where ΔT and pre-1900 Local Mean Time are also
+less certain; the modern era (1880–2100) sits at gate ≥ 99%, p95 ≈ 4′.
+
+Reproduce it (full report with the per-era chart in [`scripts/data/`](scripts/data)):
+
+```bash
+node scripts/deviation-study.js                 # full run (2000 births), caches to scripts/data/
+node scripts/deviation-study.js --limit 5       # smoke test (first 5 births)
+node scripts/deviation-study.js --report-only   # re-render the report from cache, offline
+```
+
+**Field mapping** — the official response ↔ free-human-design:
+
+| official `genekeysExperimentalV2` | free-human-design |
+| --- | --- |
+| `geneKeys.personality[]` / `.design[]` | `humanDesign.activations.personality` / `.design` |
+| `…[i].planet.name` (`Sun`, `North Node`, …) | `activation.body` (`sun`, `north_node`, …) |
+| `…[i].planet.position.location` (absolute tropical °) | `activation.longitude` |
+| `…[i].information.number` (gate) | `activation.gate` |
+| `…[i].geneKey` fractional part (`.3`) | `activation.line` |
+| `…[i].planet.velocity` sign | `activation.retrograde` |
+| `heliocentric.*` | *(not modelled — free-human-design is geocentric)* |
+
 ### Optional high-precision backend
 
 If you want Swiss Ephemeris precision (and accept its AGPL/commercial license),
@@ -306,7 +433,7 @@ npm install swisseph        # native build; provide ephemeris files via EPHE_PAT
 EPHE_BACKEND=swisseph node your-app.js
 ```
 
-`rave-engine` auto-detects it and falls back to the pure-JS backend if it isn't
+`free-human-design` auto-detects it and falls back to the pure-JS backend if it isn't
 available.
 
 ---
@@ -319,6 +446,7 @@ available.
 | `computeProfile(input)` | `{ input, engine: { p_, d_, spheres, _meta } }` (back-compat) |
 | `computeBodygraph(activations)` | `{ type, authority, profile, activatedGates, definedChannels, definedCenters, openCenters, centers, … }` |
 | `computeActivations({ birthUtc })` | The 26 raw activations (`{ personality, design }`) |
+| `computeMidpoints(points)` | Midpoint `{ points, pairs, matrix, _meta }` over labelled `{ key, longitude }` points |
 | `computeAngles({ jdUT, lat, lng })` | `{ ascendant, descendant, mc, ic }` |
 | `computeHouses({ jdUT, lat, lng, system })` | `{ system, cusps, angles }` |
 | `searchTimezones(query, { limit })` | Ranked IANA zones with offsets + city hints |
@@ -339,12 +467,13 @@ npm run coverage       # run with a coverage report
 npm run coverage:badge # refresh the coverage badge above from a fresh run
 ```
 
-200+ tests covering: the mandala mapping, regression-locked profiles, the
+240+ tests covering: the mandala mapping, regression-locked profiles, the
 bodygraph reference data + derivation, the astronomia backend, the astrology
 angles/houses (verified against the horizon/meridian geometry), the location
-lookup, the end-to-end chart, **five real reference charts** from a third-party
-Swiss-Ephemeris calculator, and **historical IANA timezone offsets** across the
-20th century.
+lookup, the end-to-end chart, the **midpoint matrix**, the **deviation-study
+comparison math** (against a committed official-engine fixture, no network),
+**five real reference charts** from a third-party Swiss-Ephemeris calculator, and
+**historical IANA timezone offsets** across the 20th century.
 
 ---
 

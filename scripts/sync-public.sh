@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 #
 # Sync the engine subset from this (private monorepo) directory into a clone of
-# the PUBLIC github.com/adamblvck/rave-engine repo. The website (site/, netlify/)
+# the PUBLIC github.com/adamblvck/free-human-design repo. The website (site/, netlify/)
 # and other private/monorepo-only files are deliberately excluded.
 #
 # Usage:
-#   scripts/sync-public.sh /path/to/rave-engine-public-clone
+#   scripts/sync-public.sh /path/to/free-human-design-public-clone
 #
 # Then in the public clone:
 #   git add -A && git commit -m "sync engine" && git push

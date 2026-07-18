@@ -1,4 +1,4 @@
-rave-engine
+free-human-design (Free Human Design API)
 Copyright (c) 2026 Adam Blvck / Blvck Studios
 Licensed under the MIT License (see LICENSE).
 
@@ -21,10 +21,10 @@ This product includes and/or depends on the following third-party software:
 Optional, NOT bundled or required:
 
 - swisseph (https://github.com/mivion/swisseph) — AGPL / commercial dual
-  license. rave-engine can use it as an opt-in high-precision backend
+  license. free-human-design can use it as an opt-in high-precision backend
   (EPHE_BACKEND=swisseph) only if a consumer installs it themselves. It is not
   a dependency of this package and none of its code or Astrodienst data files
-  are distributed with rave-engine.
+  are distributed with free-human-design.
 
 Reference data:
 

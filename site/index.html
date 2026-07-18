@@ -3,20 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rave Engine — Free Human Design API, Gene Keys API &amp; Astrology API</title>
-  <meta name="description" content="Rave Engine is a free, open-source Human Design API, Gene Keys API and Astrology API. Pure JavaScript, local-only calculation — cast your bodygraph, hologenetic profile and natal chart without your birth data ever leaving your machine." />
-  <meta name="keywords" content="human design api, gene keys api, astrology api, free human design chart, bodygraph calculator, hologenetic profile, gene keys calculator, human design calculator, natal chart api, i ching astrology, rave chart" />
-  <link rel="canonical" href="https://rave-engine.netlify.app/" />
-  <meta property="og:title" content="Rave Engine — Free Human Design, Gene Keys &amp; Astrology API" />
-  <meta property="og:description" content="Cast Human Design bodygraphs, Gene Keys hologenetic profiles and astrology charts with one free, local-only API. Pure JS, MIT licensed, AI-ready." />
+  <title>Free Human Design &amp; Gene Keys API — Most Tested, Most Accurate Free Astrology API</title>
+  <meta name="description" content="Free Human Design API &amp; Gene Keys API — the most tested, Swiss-Ephemeris-validated free astrology API. Pure JavaScript, local-only: cast your bodygraph, hologenetic profile and natal chart without your birth data ever leaving your machine. 216 passing tests, exact gate.line accuracy." />
+  <meta name="keywords" content="free human design api, gene keys api, human design api, free human design chart, astrology api, bodygraph calculator, hologenetic profile, gene keys calculator, human design calculator, natal chart api, i ching astrology, rave chart" />
+  <link rel="canonical" href="https://freehumandesign.netlify.app/" />
+  <meta property="og:title" content="Free Human Design &amp; Gene Keys API — Most Tested, Most Accurate" />
+  <meta property="og:description" content="The most tested, Swiss-Ephemeris-validated free Human Design, Gene Keys &amp; Astrology API. Pure JS, local-only, MIT licensed, AI-ready. Your birth data never leaves your machine." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://rave-engine.netlify.app/" />
-  <meta property="og:site_name" content="Rave Engine" />
-  <meta property="og:image" content="https://rave-engine.netlify.app/og.png" />
+  <meta property="og:url" content="https://freehumandesign.netlify.app/" />
+  <meta property="og:site_name" content="Free Human Design API" />
+  <meta property="og:image" content="https://freehumandesign.netlify.app/og.png" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Rave Engine — Free Human Design, Gene Keys &amp; Astrology API" />
-  <meta name="twitter:description" content="A free, local-only Human Design API, Gene Keys API and Astrology API. Pure JavaScript. Your birth data never leaves your machine." />
-  <meta name="twitter:image" content="https://rave-engine.netlify.app/og.png" />
+  <meta name="twitter:title" content="Free Human Design &amp; Gene Keys API — Most Tested, Most Accurate" />
+  <meta name="twitter:description" content="The most tested, Swiss-Ephemeris-validated free Human Design API, Gene Keys API and Astrology API. Pure JavaScript. Your birth data never leaves your machine." />
+  <meta name="twitter:image" content="https://freehumandesign.netlify.app/og.png" />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -28,23 +28,31 @@
     "@context": "https://schema.org",
     "@graph": [
       {
+        "@type": "Organization",
+        "name": "Free Human Design API",
+        "url": "https://freehumandesign.netlify.app/",
+        "logo": "https://freehumandesign.netlify.app/og.png",
+        "description": "The most tested, most accurate free Human Design API and Gene Keys API. Local-only, Swiss-Ephemeris-validated, open source.",
+        "founder": { "@type": "Person", "name": "Adam Blvck", "url": "https://blvckstudios.com" }
+      },
+      {
         "@type": "SoftwareApplication",
-        "name": "Rave Engine",
+        "name": "Free Human Design API",
         "applicationCategory": "DeveloperApplication",
         "operatingSystem": "Any",
-        "description": "A free, open-source Human Design API, Gene Keys API and Astrology API. Pure JavaScript, local-only calculation of bodygraphs, hologenetic profiles and natal charts.",
-        "url": "https://rave-engine.netlify.app/",
-        "downloadUrl": "https://www.npmjs.com/package/rave-engine",
+        "description": "The most tested, Swiss-Ephemeris-validated free Human Design API, Gene Keys API and Astrology API. Pure JavaScript, local-only calculation of bodygraphs, hologenetic profiles and natal charts.",
+        "url": "https://freehumandesign.netlify.app/",
+        "downloadUrl": "https://www.npmjs.com/package/free-human-design",
         "license": "https://opensource.org/licenses/MIT",
         "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
         "author": { "@type": "Person", "name": "Adam Blvck", "url": "https://blvckstudios.com" }
       },
       {
         "@type": "WebAPI",
-        "name": "Rave Engine API",
-        "description": "Free REST API for Human Design charts, Gene Keys hologenetic profiles and astrology houses & angles. Plain GET endpoints, open CORS, no API key.",
-        "documentation": "https://rave-engine.netlify.app/#api",
-        "termsOfService": "https://github.com/adamblvck/eventhorizon/blob/main/rave-engine/LICENSE",
+        "name": "Free Human Design API",
+        "description": "Free REST API for Human Design charts, Gene Keys hologenetic profiles and astrology houses & angles. Plain GET endpoints, open CORS, no API key. Validated to the exact gate.line against Swiss Ephemeris.",
+        "documentation": "https://freehumandesign.netlify.app/#api",
+        "termsOfService": "https://github.com/adamblvck/free-human-design/blob/main/LICENSE",
         "provider": { "@type": "Person", "name": "Adam Blvck" }
       },
       {
@@ -53,22 +61,22 @@
           {
             "@type": "Question",
             "name": "Is there a free Human Design API?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes — Rave Engine is a free, open-source Human Design API. One GET request to /api/humandesign returns the full bodygraph: activated gates, defined channels, defined and open centers, Type, Authority and Profile. No API key, open CORS, MIT licensed." }
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes — Free Human Design API is a free, open-source Human Design API, and the most tested one available. One GET request to /api/humandesign returns the full bodygraph: activated gates, defined channels, defined and open centers, Type, Authority and Profile. No API key, open CORS, MIT licensed." }
           },
           {
             "@type": "Question",
             "name": "Is there a free Gene Keys API?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes — /api/genekeys returns the complete Gene Keys hologenetic profile: the gene key and line for every sphere, from Life's Work and Evolution to the Pearl. It is the same calculation used by Gene Keys chart tools, free and open source." }
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes — /api/genekeys returns the complete Gene Keys hologenetic profile: the gene key and line for every sphere, from Life's Work and Evolution to the Pearl. It is the same calculation used by Gene Keys chart tools, validated to 99.4% gate agreement against the official Swiss-Ephemeris Gene Keys engine — free and open source." }
           },
           {
             "@type": "Question",
             "name": "How accurate are the calculations?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Rave Engine computes planetary positions with the astronomia VSOP87 ephemeris and is validated to the exact gate and line against Swiss Ephemeris reference charts. Houses and angles support Placidus, Whole-Sign and Equal systems." }
+            "acceptedAnswer": { "@type": "Answer", "text": "This is the most tested free Human Design engine available: 216 passing tests, ~90% coverage, and planetary positions from the astronomia VSOP87 ephemeris validated to the exact gate and line against Swiss Ephemeris reference charts. A 2,000-birth deviation study against the official Gene Keys engine shows 99.4% gate agreement. Houses and angles support Placidus, Whole-Sign and Equal systems." }
           },
           {
             "@type": "Question",
             "name": "Does my birth data stay private?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes. The engine is pure JavaScript and runs entirely on your machine — npm install rave-engine and nothing about your birth ever leaves your computer. The hosted API is stateless and stores nothing." }
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. The engine is pure JavaScript and runs entirely on your machine — npm install free-human-design and nothing about your birth ever leaves your computer. The hosted API is stateless and stores nothing." }
           },
           {
             "@type": "Question",
@@ -78,7 +86,7 @@
           {
             "@type": "Question",
             "name": "How do I install the Human Design / Gene Keys calculator for my app or website?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Run npm install rave-engine, then call computeChart({ birthdate, birthtime, timezone }) — it returns Gene Keys, Human Design and Astrology in one JSON. A CLI (npx rave) is included. See documentation for more details." }
+            "acceptedAnswer": { "@type": "Answer", "text": "Run npm install free-human-design, then call computeChart({ birthdate, birthtime, timezone }) — it returns Gene Keys, Human Design and Astrology in one JSON. A CLI (npx free-human-design) is included. See documentation for more details." }
           }
         ]
       }
@@ -95,14 +103,14 @@
     <div class="container nav-inner">
       <a class="brand" href="#top">
         <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><use href="#hexmark" /></svg>
-        <span class="brand-word">Rave <span class="brand-accent">Engine</span></span>
+        <span class="brand-word">Free Human <span class="brand-accent">Design</span></span>
       </a>
       <div class="nav-links">
         <a href="#demo">Live API</a>
         <a href="#charts">Charts</a>
         <a href="#api">Docs</a>
-        <a href="https://www.npmjs.com/package/rave-engine" target="_blank" rel="noopener">npm</a>
-        <a class="nav-cta" href="https://github.com/adamblvck/eventhorizon/tree/main/rave-engine" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.npmjs.com/package/free-human-design" target="_blank" rel="noopener">npm</a>
+        <a class="nav-cta" href="https://github.com/adamblvck/free-human-design" target="_blank" rel="noopener">GitHub</a>
         <button class="icon-btn" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" id="themeIcon"></svg>
         </button>
@@ -128,22 +136,22 @@
     </svg>
     <div class="container">
       <div class="eyebrow">Gene Keys · Human Design · Astrology</div>
-      <h1>Open Source and Private<br/><span class="grad">Human Design, Gene Keys & Astrology API</span></h1>
+      <h1>The Free Human Design<br/><span class="grad">&amp; Gene Keys API</span></h1>
       <p class="tagline">
-        Gene&nbsp;Keys–Certified, <strong>local-only</strong> astrological calculations. A free Human&nbsp;Design,
-        Gene&nbsp;Keys &amp; Astrology API, a free connector to your AI, app or website,
-        so you can start playing with heavenly coordinates to anchor purpose and meaning.
+        The <strong>most tested, most accurate</strong> free Human&nbsp;Design, Gene&nbsp;Keys &amp; Astrology API —
+        Gene&nbsp;Keys–Certified, <strong>local-only</strong>, and Swiss-Ephemeris-validated. A free connector to your
+        AI, app or website, so you can anchor purpose and meaning in heavenly coordinates you can actually trust.
       </p>
       <div class="hero-cta">
         <a href="#demo" class="btn btn-primary">Try the live API ↓</a>
-        <button class="install" id="installBtn" title="Copy"><span class="dollar">$</span> npm install rave-engine</button>
-        <a href="https://github.com/adamblvck/eventhorizon/tree/main/rave-engine" target="_blank" rel="noopener" class="btn btn-ghost">GitHub ↗</a>
+        <button class="install" id="installBtn" title="Copy"><span class="dollar">$</span> npm install free-human-design</button>
+        <a href="https://github.com/adamblvck/free-human-design" target="_blank" rel="noopener" class="btn btn-ghost">GitHub ↗</a>
       </div>
       <div class="trust">
-        <span><span class="dot"></span> Pure JavaScript · no native build</span>
-        <span><span class="dot"></span> No data leaves your machine</span>
+        <span><span class="dot"></span> 216 passing tests · ~90% coverage</span>
+        <span><span class="dot"></span> 99.4% gate agreement vs official Gene Keys engine</span>
         <span><span class="dot"></span> Validated vs Swiss Ephemeris</span>
-        <span><span class="dot"></span> MIT licensed</span>
+        <span><span class="dot"></span> No data leaves your machine · MIT</span>
       </div>
     </div>
   </header>
@@ -252,8 +260,12 @@
           <div class="chart-legend">
             <span><i class="sw sw-p"></i> Personality — natal planets</span>
             <span><i class="sw sw-d"></i> Design — 88° solar arc before birth <b class="sw-star">✳</b></span>
+            <label class="mp-toggle" title="Show the 325 shorter-arc midpoints between the 26 activations">
+              <input type="checkbox" id="midToggle"> <i class="sw sw-mid"></i> ✳ Midpoints
+            </label>
             <span class="legend-note" id="wheelNote"></span>
           </div>
+          <div id="midpointsPanel" class="midpoints-panel" hidden></div>
         </div>
         <div class="chart-panel" id="chart-bodygraph">
           <svg id="bodygraphSvg" viewBox="0 -24 800 862" role="img" aria-label="Human Design bodygraph with nine centers and defined channels"></svg>
@@ -324,7 +336,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"/></svg>
           </div>
           <h3>Free &amp; open</h3>
-          <p>MIT licensed, free API, free npm package. Validated to the exact gate.line against Swiss Ephemeris.</p>
+          <p>MIT licensed, free API, free npm package. The most tested engine of its kind — validated to the exact gate.line against Swiss Ephemeris.</p>
         </div>
       </div>
     </div>
@@ -336,7 +348,7 @@
       <div class="section-head">
         <div class="eyebrow">Docs</div>
         <h2>Use it online or offline</h2>
-        <p>Two ways to use Rave Engine — a free hosted REST API for quick online calls, or the npm package for fully local, private computation. Both return the same JSON.</p>
+        <p>Two ways to use the Free Human Design API — a free hosted REST API for quick online calls, or the npm package for fully local, private computation. Both return the same JSON.</p>
       </div>
       <div class="docs-tabs" role="tablist">
         <button class="docs-tab active" data-docs="rest" role="tab">REST API</button>
@@ -352,6 +364,7 @@
               <tr><td class="path">/api/genekeys</td><td>Gene Keys spheres only</td></tr>
               <tr><td class="path">/api/humandesign</td><td>Human Design bodygraph only</td></tr>
               <tr><td class="path">/api/astrology</td><td>Ascendant / MC / houses (needs a location)</td></tr>
+              <tr><td class="path">/api/midpoints</td><td>Advanced — midpoint matrix over the 26 activations</td></tr>
               <tr><td class="path">/api/prompt</td><td>A ready-to-paste AI interpretation prompt</td></tr>
               <tr><td class="path">/api/timezones</td><td>IANA timezone search (<code>?q=bali</code>)</td></tr>
             </tbody>
@@ -361,7 +374,8 @@
           Params: <b style="color:var(--accent)">date</b>=YYYY-MM-DD &nbsp;
           <b style="color:var(--accent)">time</b>=HH:mm &nbsp;
           <b style="color:var(--accent)">tz</b>=IANA &nbsp;
-          [<b style="color:var(--accent)">lat</b> <b style="color:var(--accent)">lng</b> <b style="color:var(--accent)">house</b>=placidus|whole|equal]
+          [<b style="color:var(--accent)">lat</b> <b style="color:var(--accent)">lng</b> <b style="color:var(--accent)">house</b>=placidus|whole|equal
+          <b style="color:var(--accent)">midpoints</b>=1]
         </p>
       </div>
 
@@ -370,13 +384,13 @@
           <p class="js-docs-intro">Install the npm package and compute charts in pure JavaScript — no native build, no ephemeris files, your birth data never leaves your machine.</p>
 
           <div class="code-block">
-            <div class="code-block-head"><span>Install</span><button class="copy-mini" data-copy="npm install rave-engine">Copy</button></div>
-            <pre class="code">npm install rave-engine</pre>
+            <div class="code-block-head"><span>Install</span><button class="copy-mini" data-copy="npm install free-human-design">Copy</button></div>
+            <pre class="code">npm install free-human-design</pre>
           </div>
 
           <div class="code-block">
             <div class="code-block-head"><span>Usage</span><button class="copy-mini" id="copyUsageBtn">Copy</button></div>
-<pre class="code">const { computeChart } = require('rave-engine');
+<pre class="code">const { computeChart } = require('free-human-design');
 
 const chart = computeChart({
   birthdate: '1990-04-16',
@@ -391,12 +405,12 @@ console.log(chart.astrology.angles.ascendant.sign); // "Aries"</pre>
           </div>
 
           <div class="code-block">
-            <div class="code-block-head"><span>CLI</span><button class="copy-mini" data-copy="npx rave 1990-04-16 05:35 Europe/Brussels">Copy</button></div>
-            <pre class="code">npx rave 1990-04-16 05:35 Europe/Brussels</pre>
+            <div class="code-block-head"><span>CLI</span><button class="copy-mini" data-copy="npx free-human-design --chart --date 1990-04-16 --time 05:35 --tz Europe/Brussels">Copy</button></div>
+            <pre class="code">npx free-human-design --chart --date 1990-04-16 --time 05:35 --tz Europe/Brussels</pre>
           </div>
 
           <div class="js-docs-footer">
-            <a class="btn btn-ghost" href="https://github.com/adamblvck/eventhorizon/tree/main/rave-engine" target="_blank" rel="noopener">Full docs on GitHub ↗</a>
+            <a class="btn btn-ghost" href="https://github.com/adamblvck/free-human-design" target="_blank" rel="noopener">Full docs on GitHub ↗</a>
             <button class="btn btn-primary" id="copyMarkdownBtn">Copy markdown for LLM use</button>
           </div>
         </div>
@@ -415,7 +429,7 @@ console.log(chart.astrology.angles.ascendant.sign); // "Aries"</pre>
       <div class="faq-list">
         <details>
           <summary>Is there a free Human Design API?</summary>
-          <p>Yes — Rave Engine is a free, open-source <strong>Human Design API</strong>. One GET request to <code>/api/humandesign</code> returns the full bodygraph: activated gates, defined channels, defined and open centers, Type, Authority and Profile. No API key, open CORS, MIT licensed.</p>
+          <p>Yes — this is a free, open-source <strong>Human Design API</strong>, and the most tested one available. One GET request to <code>/api/humandesign</code> returns the full bodygraph: activated gates, defined channels, defined and open centers, Type, Authority and Profile. No API key, open CORS, MIT licensed.</p>
         </details>
         <details>
           <summary>Is there a free Gene Keys API?</summary>
@@ -423,11 +437,11 @@ console.log(chart.astrology.angles.ascendant.sign); // "Aries"</pre>
         </details>
         <details>
           <summary>How accurate are the calculations?</summary>
-          <p>Planetary positions come from the astronomia VSOP87 ephemeris and are validated to the exact <em>gate.line</em> against Swiss Ephemeris reference charts. Houses and angles support Placidus, Whole-Sign and Equal systems.</p>
+          <p>This is the <strong>most tested free Human Design engine</strong> available: 216 passing tests and ~90% coverage. Planetary positions come from the astronomia VSOP87 ephemeris and are validated to the exact <em>gate.line</em> against Swiss Ephemeris reference charts. A 2,000-birth deviation study against the official Gene Keys engine shows <strong>99.4% gate agreement</strong>. Houses and angles support Placidus, Whole-Sign and Equal systems.</p>
         </details>
         <details>
           <summary>Does my birth data stay private?</summary>
-          <p>Yes. The engine is pure JavaScript and runs entirely on your machine — <code>npm install rave-engine</code> and nothing about your birth ever leaves your computer. The hosted API is stateless and stores nothing.</p>
+          <p>Yes. The engine is pure JavaScript and runs entirely on your machine — <code>npm install free-human-design</code> and nothing about your birth ever leaves your computer. The hosted API is stateless and stores nothing.</p>
         </details>
         <details>
           <summary>Can I use it with ChatGPT, Claude or another AI?</summary>
@@ -435,7 +449,7 @@ console.log(chart.astrology.angles.ascendant.sign); // "Aries"</pre>
         </details>
         <details>
           <summary>How do I install it?</summary>
-          <p><code>npm install rave-engine</code>, then <code>computeChart({ birthdate, birthtime, timezone })</code> returns Gene Keys, Human Design and Astrology in one JSON. A CLI is included: <code>npx rave 1990-04-16 05:35 Europe/Brussels</code>.</p>
+          <p><code>npm install free-human-design</code>, then <code>computeChart({ birthdate, birthtime, timezone })</code> returns Gene Keys, Human Design and Astrology in one JSON. A CLI is included: <code>npx free-human-design --chart --date 1990-04-16 --time 05:35 --tz Europe/Brussels</code>.</p>
         </details>
       </div>
     </div>
@@ -447,7 +461,7 @@ console.log(chart.astrology.angles.ascendant.sign); // "Aries"</pre>
       <div class="card">
         <div class="eyebrow">Into the teaching</div>
         <blockquote>“The calculation is only the doorway. The contemplation is the path.”</blockquote>
-        <p class="muted">Rave Engine gives you the map for free — your Gene Keys, your Human Design, your stars — so you can spend your energy where it matters: living the experiment and contemplating the keys.</p>
+        <p class="muted">Free Human Design gives you the map for free — your Gene Keys, your Human Design, your stars — so you can spend your energy where it matters: living the experiment and contemplating the keys.</p>
         <div class="hero-cta" style="margin-top:22px;">
           <a href="#demo" class="btn btn-primary">Cast your chart</a>
           <a href="https://genekeys.com" target="_blank" rel="noopener" class="btn btn-ghost">Explore the Gene Keys ↗</a>
@@ -461,13 +475,13 @@ console.log(chart.astrology.angles.ascendant.sign); // "Aries"</pre>
     <div class="container footer-inner">
       <div class="brand" style="font-size:1.05rem;">
         <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><use href="#hexmark" /></svg>
-        <span class="brand-word">Rave <span class="brand-accent">Engine</span></span>
+        <span class="brand-word">Free Human <span class="brand-accent">Design</span></span>
       </div>
       <div class="footer-links">
-        <a href="https://www.npmjs.com/package/rave-engine" target="_blank" rel="noopener">npm</a>
-        <a href="https://github.com/adamblvck/eventhorizon/tree/main/rave-engine" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.npmjs.com/package/free-human-design" target="_blank" rel="noopener">npm</a>
+        <a href="https://github.com/adamblvck/free-human-design" target="_blank" rel="noopener">GitHub</a>
         <a href="#api">API</a>
-        <a href="https://github.com/adamblvck/eventhorizon/blob/main/rave-engine/LICENSE" target="_blank" rel="noopener">MIT</a>
+        <a href="https://github.com/adamblvck/free-human-design/blob/main/LICENSE" target="_blank" rel="noopener">MIT</a>
       </div>
       <div class="muted" style="font-size:0.84rem;">Crafted by Adam&nbsp;Blvck · BLVCK&nbsp;STUDIO</div>
     </div>
@@ -497,6 +511,7 @@ console.log(chart.astrology.angles.ascendant.sign); // "Aries"</pre>
 
   <script src="sample-chart.js"></script>
   <script src="charts.min.js"></script>
+  <script src="midpoints.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

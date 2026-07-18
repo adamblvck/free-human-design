@@ -1,4 +1,4 @@
-/* rave-engine landing page — vanilla JS, no build step. */
+/* Free Human Design API landing page — vanilla JS, no build step. */
 (function () {
   'use strict';
   const $ = (s, r = document) => r.querySelector(s);
@@ -11,9 +11,9 @@
   function applyTheme(t) {
     root.setAttribute('data-theme', t);
     $('#themeIcon').innerHTML = t === 'dark' ? MOON : SUN;
-    try { localStorage.setItem('rave-theme', t); } catch (e) {}
+    try { localStorage.setItem('fhd-theme', t); } catch (e) {}
   }
-  const saved = (() => { try { return localStorage.getItem('rave-theme'); } catch (e) { return null; } })();
+  const saved = (() => { try { return localStorage.getItem('fhd-theme'); } catch (e) { return null; } })();
   applyTheme(saved || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'));
   $('#themeToggle').addEventListener('click', () =>
     applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));
@@ -83,7 +83,7 @@
   function copy(text, msg) {
     navigator.clipboard.writeText(text).then(() => showToast(msg || 'Copied')).catch(() => showToast('Copy failed'));
   }
-  $('#installBtn').addEventListener('click', () => copy('npm install rave-engine', 'Copied: npm install rave-engine'));
+  $('#installBtn').addEventListener('click', () => copy('npm install free-human-design', 'Copied: npm install free-human-design'));
 
   /* ---------- Timezone hints ---------- */
   const COMMON_TZ = ['Asia/Bangkok', 'Europe/Brussels', 'Europe/London', 'America/New_York', 'America/Los_Angeles',
@@ -121,7 +121,7 @@
     copy(btn.dataset.copy, 'Copied')));
 
   /* ---------- JavaScript usage snippet ---------- */
-  const JS_USAGE = `const { computeChart } = require('rave-engine');
+  const JS_USAGE = `const { computeChart } = require('free-human-design');
 
 const chart = computeChart({
   birthdate: '1990-04-16',
@@ -137,20 +137,20 @@ console.log(chart.astrology.angles.ascendant.sign); // "Aries"`;
   if (copyUsage) copyUsage.addEventListener('click', () => copy(JS_USAGE, 'Usage snippet copied'));
 
   /* ---------- Markdown doc for LLM use ---------- */
-  const LLM_MARKDOWN = `# Rave Engine — Human Design, Gene Keys & Astrology API
+  const LLM_MARKDOWN = `# Free Human Design API — Human Design, Gene Keys & Astrology API
 
-Rave Engine is a free, open-source, local-first engine for computing Human Design bodygraphs, Gene Keys hologenetic profiles, and astrology charts (Ascendant, MC, houses). Pure JavaScript — no native build, no ephemeris files. MIT licensed. Validated to the exact gate.line against Swiss Ephemeris.
+Free Human Design API is a free, open-source, local-first engine for computing Human Design bodygraphs, Gene Keys hologenetic profiles, and astrology charts (Ascendant, MC, houses). It is the most tested engine of its kind — 216 passing tests, ~90% coverage — validated to the exact gate.line against Swiss Ephemeris, with 99.4% gate agreement against the official Gene Keys engine. Pure JavaScript — no native build, no ephemeris files. MIT licensed.
 
 ## Two ways to use it
 
 ### 1. Offline (npm) — your birth data never leaves your machine
 
 \`\`\`bash
-npm install rave-engine
+npm install free-human-design
 \`\`\`
 
 \`\`\`js
-const { computeChart } = require('rave-engine');
+const { computeChart } = require('free-human-design');
 
 const chart = computeChart({
   birthdate: '1990-04-16',
@@ -170,13 +170,13 @@ chart.astrology.angles.ascendant.degInSign;   // 25.3
 CLI:
 
 \`\`\`bash
-npx rave 1990-04-16 05:35 Europe/Brussels
+npx free-human-design --chart --date 1990-04-16 --time 05:35 --tz Europe/Brussels
 \`\`\`
 
 ### 2. Online (REST API) — no API key, open CORS
 
 \`\`\`bash
-curl "https://rave-engine.netlify.app/api/chart?date=1990-04-16&time=05:35&tz=Europe/Brussels"
+curl "https://freehumandesign.netlify.app/api/chart?date=1990-04-16&time=05:35&tz=Europe/Brussels"
 \`\`\`
 
 | Endpoint          | Returns                                                     |
@@ -185,10 +185,13 @@ curl "https://rave-engine.netlify.app/api/chart?date=1990-04-16&time=05:35&tz=Eu
 | \`/api/genekeys\`   | Gene Keys spheres only                                     |
 | \`/api/humandesign\` | Human Design bodygraph only                                |
 | \`/api/astrology\`  | Ascendant / MC / houses (needs lat/lng)                    |
+| \`/api/midpoints\`  | Advanced — midpoint matrix over the 26 activations         |
 | \`/api/prompt\`     | A ready-to-paste AI interpretation prompt                  |
 | \`/api/timezones\`  | IANA timezone search (\`?q=bali\`)                            |
 
-Params: \`date=YYYY-MM-DD\`, \`time=HH:mm\`, \`tz=IANA\`, optional \`lat\`, \`lng\`, \`house=placidus|whole|equal\`.
+Params: \`date=YYYY-MM-DD\`, \`time=HH:mm\`, \`tz=IANA\`, optional \`lat\`, \`lng\`, \`house=placidus|whole|equal\`, \`midpoints=1\`.
+
+Add \`?midpoints=1\` (alias \`?advanced=1\`) to any chart route to include \`humanDesign.midpoints\` — the shorter-arc midpoint matrix (points, pairs, and an N×N grid) over all 26 Human Design activations.
 
 ## Output shape (abridged)
 
@@ -230,9 +233,9 @@ Params: \`date=YYYY-MM-DD\`, \`time=HH:mm\`, \`tz=IANA\`, optional \`lat\`, \`ln
 
 ## Links
 
-- npm: https://www.npmjs.com/package/rave-engine
-- GitHub: https://github.com/adamblvck/eventhorizon/tree/main/rave-engine
-- Live API + chart demo: https://rave-engine.netlify.app
+- npm: https://www.npmjs.com/package/free-human-design
+- GitHub: https://github.com/adamblvck/free-human-design
+- Live API + chart demo: https://freehumandesign.netlify.app
 
 ## Notes for LLMs
 
@@ -299,17 +302,27 @@ Params: \`date=YYYY-MM-DD\`, \`time=HH:mm\`, \`tz=IANA\`, optional \`lat\`, \`ln
       : '<span class="chip">no location — add lat/lng or a city timezone</span>';
 
     $('#jsonOut').innerHTML = highlight(chart);
-    const base = location.origin && location.protocol.startsWith('http') ? location.origin : 'https://rave-engine.netlify.app';
+    const base = location.origin && location.protocol.startsWith('http') ? location.origin : 'https://freehumandesign.netlify.app';
     $('#endpointUrl').textContent = `/api/chart?${qs}`;
     $('#curlOut').textContent = `curl "${base}/api/chart?${qs}"`;
     $('#copyJsonBtn').onclick = () => copy(JSON.stringify(chart, null, 2), 'Chart JSON copied');
     $('#copyCurlBtn').onclick = () => copy(`curl "${base}/api/chart?${qs}"`, 'cURL command copied');
 
     // Drawn charts (wheel, bodygraph, hologenetic profile)
-    if (window.RaveCharts) window.RaveCharts.renderAll(chart);
+    if (window.FhdCharts) window.FhdCharts.renderAll(chart);
+    // Midpoint overlay follows the current toggle state (re-drawn each render).
+    lastChart = chart;
+    if (window.FhdMidpoints) window.FhdMidpoints.sync(chart, $('#midToggle') && $('#midToggle').checked);
     const note = $('#wheelNote');
     if (note) note.textContent = chart.astrology ? '' : 'Add a location (or a city timezone) for houses & angles.';
   }
+
+  // Remember the last rendered chart so the midpoint toggle can redraw without recomputing.
+  let lastChart = null;
+  const midToggle = $('#midToggle');
+  if (midToggle) midToggle.addEventListener('change', () => {
+    if (window.FhdMidpoints) window.FhdMidpoints.sync(lastChart, midToggle.checked);
+  });
 
   async function compute(updateUrl) {
     const qs = buildQuery();
@@ -319,7 +332,7 @@ Params: \`date=YYYY-MM-DD\`, \`time=HH:mm\`, \`tz=IANA\`, optional \`lat\`, \`ln
     btn.textContent = '✦ Computing…';
     btn.disabled = true;
     try {
-      const res = await fetch(`/api/chart?${qs}&pretty=1`);
+      const res = await fetch(`/api/chart?${qs}&pretty=1&midpoints=1`);
       if (!res.ok) throw new Error('api ' + res.status);
       const chart = await res.json();
       render(chart, qs);

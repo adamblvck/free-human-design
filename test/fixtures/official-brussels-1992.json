@@ -1,0 +1,514 @@
+{
+  "sample": {
+    "id": "1992-12-09T00:35_Europe/Brussels",
+    "birthdate": "1992-12-09",
+    "birthtime": "00:35",
+    "timezone": "Europe/Brussels",
+    "lat": 50.8505,
+    "lng": 4.3488,
+    "city": "Brussels",
+    "year": 1992
+  },
+  "raw": {
+    "geneKeys": {
+      "personality": [
+        {
+          "geneKey": 26.1,
+          "planet": {
+            "name": "Sun",
+            "position": {
+              "location": 257.15120566666667
+            },
+            "velocity": 1.0156426
+          },
+          "information": {
+            "number": "26"
+          }
+        },
+        {
+          "geneKey": 20.5,
+          "planet": {
+            "name": "Moon",
+            "position": {
+              "location": 64.46648825
+            },
+            "velocity": 13.4969056
+          },
+          "information": {
+            "number": "20"
+          }
+        },
+        {
+          "geneKey": 14.3,
+          "planet": {
+            "name": "Mercury",
+            "position": {
+              "location": 236.40284272222223
+            },
+            "velocity": 0.9614733
+          },
+          "information": {
+            "number": "14"
+          }
+        },
+        {
+          "geneKey": 60.5,
+          "planet": {
+            "name": "Venus",
+            "position": {
+              "location": 300.28172475
+            },
+            "velocity": 1.1727262
+          },
+          "information": {
+            "number": "60"
+          }
+        },
+        {
+          "geneKey": 56.1,
+          "planet": {
+            "name": "Mars",
+            "position": {
+              "location": 116.927908
+            },
+            "velocity": -0.1395553
+          },
+          "information": {
+            "number": "56"
+          }
+        },
+        {
+          "geneKey": 48.2,
+          "planet": {
+            "name": "Jupiter",
+            "position": {
+              "location": 190.88208294444445
+            },
+            "velocity": 0.139242
+          },
+          "information": {
+            "number": "48"
+          }
+        },
+        {
+          "geneKey": 13.1,
+          "planet": {
+            "name": "Saturn",
+            "position": {
+              "location": 314.17143891666666
+            },
+            "velocity": 0.0825408
+          },
+          "information": {
+            "number": "13"
+          }
+        },
+        {
+          "geneKey": 54.2,
+          "planet": {
+            "name": "Uranus",
+            "position": {
+              "location": 286.3572550555556
+            },
+            "velocity": 0.0537564
+          },
+          "information": {
+            "number": "54"
+          }
+        },
+        {
+          "geneKey": 54.3,
+          "planet": {
+            "name": "Neptune",
+            "position": {
+              "location": 287.52583525
+            },
+            "velocity": 0.0337175
+          },
+          "information": {
+            "number": "54"
+          }
+        },
+        {
+          "geneKey": 43.6,
+          "planet": {
+            "name": "Pluto",
+            "position": {
+              "location": 233.81258711111113
+            },
+            "velocity": 0.0376933
+          },
+          "information": {
+            "number": "43"
+          }
+        },
+        {
+          "geneKey": 26.5,
+          "planet": {
+            "name": "true Node",
+            "position": {
+              "location": 261.49966183333333
+            },
+            "velocity": -0.0048039
+          },
+          "information": {
+            "number": "26"
+          }
+        },
+        {
+          "geneKey": 4.6,
+          "planet": {
+            "name": "Chiron",
+            "position": {
+              "location": 143.57796633333334
+            },
+            "velocity": -0.0045729
+          },
+          "information": {
+            "number": "4"
+          }
+        },
+        {
+          "geneKey": 47.4,
+          "planet": {
+            "name": "Ascendant",
+            "position": {
+              "location": 170.09757758333333
+            },
+            "velocity": 0
+          },
+          "information": {
+            "number": "47"
+          }
+        },
+        {
+          "geneKey": 45.1,
+          "planet": {
+            "name": "MC",
+            "position": {
+              "location": 77.17905725
+            },
+            "velocity": 0
+          },
+          "information": {
+            "number": "45"
+          }
+        },
+        {
+          "geneKey": 45.1,
+          "planet": {
+            "name": "Earth",
+            "position": {
+              "location": 77.15120566666667
+            },
+            "velocity": 1.0156426
+          },
+          "information": {
+            "number": "45"
+          }
+        },
+        {
+          "geneKey": 45.5,
+          "planet": {
+            "name": "mean Node",
+            "position": {
+              "location": 81.49966183333333
+            },
+            "velocity": -0.0048039
+          },
+          "information": {
+            "number": "45"
+          }
+        },
+        {
+          "geneKey": 45.5,
+          "planet": {
+            "name": "south Node",
+            "position": {
+              "location": 81.49966183333333
+            },
+            "velocity": -0.0048039
+          },
+          "information": {
+            "number": "45"
+          }
+        },
+        {
+          "geneKey": 22.4,
+          "planet": {
+            "name": "Descendant",
+            "position": {
+              "location": 350.0975775833333
+            },
+            "velocity": 0
+          },
+          "information": {
+            "number": "22"
+          }
+        },
+        {
+          "geneKey": 26.1,
+          "planet": {
+            "name": "IC",
+            "position": {
+              "location": 257.17905725
+            },
+            "velocity": 0
+          },
+          "information": {
+            "number": "26"
+          }
+        }
+      ],
+      "design": [
+        {
+          "geneKey": 47.3,
+          "planet": {
+            "name": "Sun",
+            "position": {
+              "location": 169.15101383333334
+            },
+            "velocity": 0.972525
+          },
+          "information": {
+            "number": "47"
+          }
+        },
+        {
+          "geneKey": 63.4,
+          "planet": {
+            "name": "Moon",
+            "position": {
+              "location": 344.3642607777778
+            },
+            "velocity": 11.9699072
+          },
+          "information": {
+            "number": "63"
+          }
+        },
+        {
+          "geneKey": 64.5,
+          "planet": {
+            "name": "Mercury",
+            "position": {
+              "location": 165.97179575
+            },
+            "velocity": 1.9046905
+          },
+          "information": {
+            "number": "64"
+          }
+        },
+        {
+          "geneKey": 48.5,
+          "planet": {
+            "name": "Venus",
+            "position": {
+              "location": 193.4834878611111
+            },
+            "velocity": 1.22595
+          },
+          "information": {
+            "number": "48"
+          }
+        },
+        {
+          "geneKey": 15.2,
+          "planet": {
+            "name": "Mars",
+            "position": {
+              "location": 89.66080388888889
+            },
+            "velocity": 0.572837
+          },
+          "information": {
+            "number": "15"
+          }
+        },
+        {
+          "geneKey": 6.2,
+          "planet": {
+            "name": "Jupiter",
+            "position": {
+              "location": 173.78289741666669
+            },
+            "velocity": 0.2159451
+          },
+          "information": {
+            "number": "6"
+          }
+        },
+        {
+          "geneKey": 19.6,
+          "planet": {
+            "name": "Saturn",
+            "position": {
+              "location": 312.7687025277778
+            },
+            "velocity": -0.052306
+          },
+          "information": {
+            "number": "19"
+          }
+        },
+        {
+          "geneKey": 38.5,
+          "planet": {
+            "name": "Uranus",
+            "position": {
+              "location": 284.09779191666667
+            },
+            "velocity": -0.0094122
+          },
+          "information": {
+            "number": "38"
+          }
+        },
+        {
+          "geneKey": 54.2,
+          "planet": {
+            "name": "Neptune",
+            "position": {
+              "location": 286.25101141666664
+            },
+            "velocity": -0.0086151
+          },
+          "information": {
+            "number": "54"
+          }
+        },
+        {
+          "geneKey": 43.2,
+          "planet": {
+            "name": "Pluto",
+            "position": {
+              "location": 230.65836002777777
+            },
+            "velocity": 0.0232037
+          },
+          "information": {
+            "number": "43"
+          }
+        },
+        {
+          "geneKey": 11.5,
+          "planet": {
+            "name": "true Node",
+            "position": {
+              "location": 266.9484034166667
+            },
+            "velocity": -0.2289293
+          },
+          "information": {
+            "number": "11"
+          }
+        },
+        {
+          "geneKey": 7.5,
+          "planet": {
+            "name": "Chiron",
+            "position": {
+              "location": 137.85602569444444
+            },
+            "velocity": 0.1148171
+          },
+          "information": {
+            "number": "7"
+          }
+        },
+        {
+          "geneKey": 61.2,
+          "planet": {
+            "name": "Ascendant",
+            "position": {
+              "location": 292.09699375
+            },
+            "velocity": 0
+          },
+          "information": {
+            "number": "61"
+          }
+        },
+        {
+          "geneKey": 14.1,
+          "planet": {
+            "name": "MC",
+            "position": {
+              "location": 235.3557473611111
+            },
+            "velocity": 0
+          },
+          "information": {
+            "number": "14"
+          }
+        },
+        {
+          "geneKey": 22.3,
+          "planet": {
+            "name": "Earth",
+            "position": {
+              "location": 349.1510138333333
+            },
+            "velocity": 0.972525
+          },
+          "information": {
+            "number": "22"
+          }
+        },
+        {
+          "geneKey": 12.5,
+          "planet": {
+            "name": "mean Node",
+            "position": {
+              "location": 86.94840341666668
+            },
+            "velocity": -0.2289293
+          },
+          "information": {
+            "number": "12"
+          }
+        },
+        {
+          "geneKey": 12.5,
+          "planet": {
+            "name": "south Node",
+            "position": {
+              "location": 86.94840341666668
+            },
+            "velocity": -0.2289293
+          },
+          "information": {
+            "number": "12"
+          }
+        },
+        {
+          "geneKey": 62.2,
+          "planet": {
+            "name": "Descendant",
+            "position": {
+              "location": 112.09699375000002
+            },
+            "velocity": 0
+          },
+          "information": {
+            "number": "62"
+          }
+        },
+        {
+          "geneKey": 8.1,
+          "planet": {
+            "name": "IC",
+            "position": {
+              "location": 55.35574736111107
+            },
+            "velocity": 0
+          },
+          "information": {
+            "number": "8"
+          }
+        }
+      ]
+    }
+  }
+}

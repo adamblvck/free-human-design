@@ -1,4 +1,4 @@
-/* rave-engine — landing page styles.
+/* Free Human Design API — landing page styles.
    Cosmic-grimoire: dark-first, refined serif display, restrained violet/gold. */
 
 @font-face {
@@ -362,6 +362,25 @@ footer { border-top: 1px solid var(--border); padding: 40px 0; color: var(--mute
 .sw-pea { background: var(--gk-pearl); }
 .sw-star { color: var(--hd-d); font-style: normal; }
 .legend-note { color: var(--faint); }
+.sw-mid { background: #57e39b; }
+
+/* Midpoints toggle + panel */
+.mp-toggle {
+  display: inline-flex; align-items: center; gap: 6px; cursor: pointer; user-select: none;
+  padding: 3px 10px; border: 1px solid var(--border); border-radius: 999px;
+  color: var(--muted); font-size: 0.78rem;
+}
+.mp-toggle:hover { border-color: var(--accent); color: var(--text); }
+.mp-toggle input { accent-color: #57e39b; width: 13px; height: 13px; margin: 0; }
+#wheelMidpoints circle { transition: opacity 0.2s; }
+.midpoints-panel { margin: 16px auto 0; max-width: 560px; }
+.mp-count { font-size: 0.78rem; color: var(--muted); text-align: center; margin-bottom: 8px; }
+.mp-scroll { max-height: 260px; overflow-y: auto; border: 1px solid var(--border); border-radius: 10px; }
+.mp-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+.mp-table th, .mp-table td { padding: 4px 10px; border-bottom: 1px solid var(--border); text-align: left; white-space: nowrap; }
+.mp-table thead th { position: sticky; top: 0; background: var(--card); color: var(--muted); font-weight: 600; }
+.mp-table .mp-gl { font-family: var(--mono); color: #2ea87a; font-weight: 600; }
+@media (prefers-color-scheme: dark) { .mp-table .mp-gl { color: #57e39b; } }
 
 /* Astrology wheel */
 .w-ring { fill: none; stroke: var(--border-strong); }

@@ -6,7 +6,7 @@ const { iching_map } = require('../src/calc/mandala');
 // Five real bodygraphs captured from a production Human Design calculator
 // (Swiss Ephemeris based). Each row is the gate.line for a body, in the standard
 // order, for the Design and Personality streams. These independently validate
-// rave-engine's pure-JS ephemeris + historical timezone handling against a
+// free-human-design's pure-JS ephemeris + historical timezone handling against a
 // third-party reference.
 
 const ORDER = [
@@ -47,12 +47,12 @@ const CHARTS = [
   },
 ];
 
-// Cells where rave-engine diverges from the screenshot. Each is exactly one
+// Cells where free-human-design diverges from the screenshot. Each is exactly one
 // "line" away on the mandala wheel (see wheelLineSteps below) — the expected
 // envelope for inter-calculator differences (sub-line ephemeris, true-node
 // algorithm, and — for Boise — a 1-hour timezone-policy difference).
 //
-// Boise: the reference calculator used UTC-7 (MST). rave-engine uses UTC-6
+// Boise: the reference calculator used UTC-7 (MST). free-human-design uses UTC-6
 // (MDT) because August 1974 was under the US year-round Daylight Saving Time
 // (Emergency Daylight Saving Time Energy Conservation Act of 1973) — the
 // historically-correct offset per the IANA database. Fed the reference's exact
@@ -167,7 +167,7 @@ describe('reference charts — derived bodygraph', () => {
 
 // The Boise 1974 chart isolates a real historical-timezone edge case: the US
 // observed year-round Daylight Saving Time in 1974, so 12:00 local Boise time
-// is MDT (UTC-6), not MST (UTC-7). rave-engine follows the IANA database and
+// is MDT (UTC-6), not MST (UTC-7). free-human-design follows the IANA database and
 // gets this right; the reference calculator used UTC-7.
 describe('Boise 1974 — historical DST handling', () => {
   it('America/Boise applies year-round DST: 12:00 → 18:00Z (UTC-6, MDT)', () => {

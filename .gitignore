@@ -4,3 +4,7 @@ coverage
 *.log
 .netlify
 *.tgz
+
+# Deviation-study raw cache (large, re-runnable via scripts/deviation-study.js).
+# The rendered reports (deviation-report.md/.html) are kept.
+scripts/data/deviation-*.json

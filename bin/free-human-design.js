@@ -32,25 +32,26 @@ function parseArgs(argv) {
 
 function printUsage() {
   const lines = [
-    'rave-engine CLI',
+    'Free Human Design API CLI',
     '',
     'Compute a profile (p_/d_ + spheres):',
-    '  rave --date 1972-08-02 --time 14:30 --tz Asia/Bangkok',
+    '  free-human-design --date 1972-08-02 --time 14:30 --tz Asia/Bangkok',
     '',
     'Compute the full chart (Gene Keys + Human Design + Astrology):',
-    '  rave --chart --date 1972-08-02 --time 14:30 --tz Asia/Bangkok',
-    '  rave --chart --date 1972-08-02 --time 14:30 --tz Asia/Bangkok --lat 13.75 --lng 100.5',
+    '  free-human-design --chart --date 1972-08-02 --time 14:30 --tz Asia/Bangkok',
+    '  free-human-design --chart --date 1972-08-02 --time 14:30 --tz Asia/Bangkok --lat 13.75 --lng 100.5',
     '',
     'Aliases: --date|--birthdate, --time|--birthtime, --tz|--timezone',
     '',
     'Search timezones:',
-    '  rave --tz-search bali',
-    '  rave --tz-search "los ang" --limit 5',
+    '  free-human-design --tz-search bali',
+    '  free-human-design --tz-search "los ang" --limit 5',
     '',
     'Flags:',
     '  --chart      Full Gene Keys + Human Design + Astrology output.',
     '  --lat --lng  Birth coordinates (else derived from the timezone city).',
     '  --house      House system for --chart: placidus|whole|equal (default placidus).',
+    '  --midpoints  Advanced: add the midpoint matrix over the 26 activations.',
     '  --json       Print full JSON instead of the readable summary.',
     '  --pretty     Indent output (default: 2 spaces).',
     '  --help       Show this help.',
@@ -120,6 +121,16 @@ function printChartSummary(chart) {
     lines.push('');
     lines.push('— Astrology — (no location resolved; pass --lat/--lng or a recognized --tz)');
   }
+  if (hd.midpoints) {
+    const mp = hd.midpoints;
+    lines.push('');
+    lines.push(`— Midpoints (advanced) — ${mp._meta.count} points, ${mp._meta.pairCount} pairs (${mp._meta.method}) —`);
+    // Show a handful so the summary stays readable; the full matrix is in --json.
+    for (const p of mp.pairs.slice(0, 6)) {
+      lines.push(`  ${p.a} × ${p.b}  →  ${p.gate}.${p.line}  (${p.longitude.toFixed(2)}°)`);
+    }
+    if (mp.pairs.length > 6) lines.push(`  … +${mp.pairs.length - 6} more (use --json for the full matrix)`);
+  }
   return lines.join('\n');
 }
 
@@ -143,6 +154,7 @@ function runChart(args) {
     timezone,
     location,
     houseSystem: args.house || 'placidus',
+    midpoints: Boolean(args.midpoints),
   });
 
   if (args.json) {

@@ -1,4 +1,4 @@
-// rave-engine free API — a single routing function.
+// Free Human Design API — a single routing function.
 //
 // Everything is computed locally (pure-JS ephemeris); no third-party astrology
 // service is ever called. CORS is open so the API is usable from any browser,
@@ -53,6 +53,12 @@ function routeFromPath(event) {
   return (seg || q.endpoint || '').toLowerCase();
 }
 
+function parseBool(v) {
+  if (v === undefined || v === null || v === '') return false;
+  const s = String(v).toLowerCase();
+  return s === '1' || s === 'true' || s === 'yes' || s === 'on';
+}
+
 function getBirthInput(q) {
   const input = {
     birthdate: q.date || q.birthdate,
@@ -63,23 +69,27 @@ function getBirthInput(q) {
   const lng = Number(q.lng);
   if (Number.isFinite(lat) && Number.isFinite(lng)) input.location = { lat, lng };
   if (q.house) input.houseSystem = q.house;
+  // Advanced: midpoint matrix. Opt in with ?midpoints=1 or ?advanced=1.
+  if (parseBool(q.midpoints) || parseBool(q.advanced)) input.midpoints = true;
   return input;
 }
 
 const USAGE = {
-  name: 'rave-engine',
+  name: 'free-human-design',
   version: pkg.version,
   description: 'Free, local-only Gene Keys + Human Design + Astrology API.',
-  docs: 'https://github.com/adamblvck/eventhorizon/tree/main/rave-engine',
+  docs: 'https://github.com/adamblvck/free-human-design',
   endpoints: {
-    'GET /api/chart': 'Full chart. Params: date, time, tz, [lat, lng, house]',
+    'GET /api/chart': 'Full chart. Params: date, time, tz, [lat, lng, house, midpoints]',
     'GET /api/genekeys': 'Gene Keys spheres only.',
-    'GET /api/humandesign': 'Human Design bodygraph only.',
+    'GET /api/humandesign': 'Human Design bodygraph only. Add ?midpoints=1 for the matrix.',
     'GET /api/astrology': 'Ascendant / MC / houses (needs a location or a city timezone).',
+    'GET /api/midpoints': 'Advanced: midpoint matrix over the 26 activations.',
     'GET /api/prompt': 'A ready-to-paste AI interpretation prompt.',
     'GET /api/timezones': 'IANA timezone search. Param: q',
   },
   example: '/api/chart?date=1972-08-02&time=14:30&tz=Asia/Bangkok',
+  advanced: 'Add ?midpoints=1 (alias ?advanced=1) to any chart route for the midpoint matrix.',
 };
 
 function buildPrompt(chart) {
@@ -147,6 +157,9 @@ exports.handler = async (event) => {
       }, true);
     }
 
+    // The dedicated midpoints route always computes the matrix.
+    if (route === 'midpoints' || route === 'midpoint') input.midpoints = true;
+
     const chart = computeChart(input);
 
     switch (route) {
@@ -160,6 +173,9 @@ exports.handler = async (event) => {
       case 'human-design':
       case 'hd':
         return json(200, { input: chart.input, humanDesign: chart.humanDesign }, pretty);
+      case 'midpoints':
+      case 'midpoint':
+        return json(200, { input: chart.input, midpoints: chart.humanDesign.midpoints }, pretty);
       case 'astrology':
       case 'astro':
         if (!chart.astrology) {

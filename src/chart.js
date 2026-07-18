@@ -11,8 +11,30 @@
 const { parseBirthToUtc } = require('./birth/parseBirth');
 const { computeEngineTest, computeActivations } = require('./calc/profile');
 const { computeBodygraph } = require('./hd/bodygraph');
+const { computeMidpoints } = require('./calc/midpoints');
 const { computeAngles, computeHouses } = require('./hd/houses');
 const { resolveLocation } = require('./timezone/location');
+
+/**
+ * Build the point set fed to the midpoint matrix: the 26 Human Design
+ * activations (13 bodies × personality + design), keyed `p_<body>` / `d_<body>`.
+ * @param {{ personality: Array<object>, design: Array<object> }} activations
+ */
+function midpointPoints(activations) {
+  const fromStream = (list, prefix) =>
+    list.map((a) => ({
+      key: `${prefix}_${a.body}`,
+      body: a.body,
+      stream: prefix === 'p' ? 'personality' : 'design',
+      longitude: a.longitude,
+      gate: a.gate,
+      line: a.line,
+    }));
+  return [
+    ...fromStream(activations.personality, 'p'),
+    ...fromStream(activations.design, 'd'),
+  ];
+}
 
 /**
  * @param {{
@@ -20,7 +42,8 @@ const { resolveLocation } = require('./timezone/location');
  *   birthtime: string,
  *   timezone: string,
  *   location?: { lat:number, lng:number },
- *   houseSystem?: 'placidus'|'whole'|'equal'
+ *   houseSystem?: 'placidus'|'whole'|'equal',
+ *   midpoints?: boolean
  * }} input
  */
 function computeChart(input) {
@@ -52,6 +75,28 @@ function computeChart(input) {
   // geneKeys spheres without the internal _meta key.
   const { _meta: spheresMeta, ...spheres } = engine.spheres;
 
+  const humanDesign = {
+    type: bodygraph.type,
+    authority: bodygraph.authority,
+    profile: bodygraph.profile,
+    definitionCount: bodygraph.definitionCount,
+    p_: engine.p_,
+    d_: engine.d_,
+    activations: { personality: activations.personality, design: activations.design },
+    activatedGates: bodygraph.activatedGates,
+    definedChannels: bodygraph.definedChannels,
+    definedCenters: bodygraph.definedCenters,
+    openCenters: bodygraph.openCenters,
+    centers: bodygraph.centers,
+    gateActivations: bodygraph.gateActivations,
+  };
+
+  // Advanced, opt-in: the midpoint matrix over the 26 activations. Left off the
+  // default output (it's O(n²) and most callers don't need it).
+  if (input.midpoints) {
+    humanDesign.midpoints = computeMidpoints(midpointPoints(activations));
+  }
+
   return {
     input: {
       birthdate: input.birthdate,
@@ -61,24 +106,10 @@ function computeChart(input) {
       location,
     },
     geneKeys: { spheres },
-    humanDesign: {
-      type: bodygraph.type,
-      authority: bodygraph.authority,
-      profile: bodygraph.profile,
-      definitionCount: bodygraph.definitionCount,
-      p_: engine.p_,
-      d_: engine.d_,
-      activations: { personality: activations.personality, design: activations.design },
-      activatedGates: bodygraph.activatedGates,
-      definedChannels: bodygraph.definedChannels,
-      definedCenters: bodygraph.definedCenters,
-      openCenters: bodygraph.openCenters,
-      centers: bodygraph.centers,
-      gateActivations: bodygraph.gateActivations,
-    },
+    humanDesign,
     astrology,
     _meta: engine._meta,
   };
 }
 
-module.exports = { computeChart };
+module.exports = { computeChart, midpointPoints };

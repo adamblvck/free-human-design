@@ -1,11 +1,11 @@
 {
-  "name": "rave-engine",
+  "name": "free-human-design",
   "version": "1.0.0",
-  "description": "Pure-JS Human Design & Gene Keys engine: gates, lines, centers, channels and a full bodygraph (Type/Authority/Profile), plus extended astrology (Ascendant/MC/houses) and IANA timezone tools. No native build, no ephemeris data files.",
+  "description": "Free Human Design API & Gene Keys API — the most tested, Swiss-Ephemeris-validated pure-JS engine for bodygraphs (Type/Authority/Profile), Gene Keys hologenetic profiles and extended astrology (Ascendant/MC/houses). No native build, no ephemeris data files, no birth data leaves your machine.",
   "main": "src/index.js",
   "type": "commonjs",
   "bin": {
-    "rave": "bin/rave.js"
+    "free-human-design": "bin/free-human-design.js"
   },
   "exports": {
     ".": "./src/index.js",
@@ -22,13 +22,19 @@
     "test": "jest",
     "coverage": "jest --coverage",
     "coverage:badge": "jest --coverage && node scripts/make-coverage-badge.js",
-    "cli": "node bin/rave.js",
+    "cli": "node bin/free-human-design.js",
     "prepublishOnly": "jest"
   },
   "keywords": [
+    "free-human-design",
+    "free-human-design-api",
+    "human-design-api",
+    "gene-keys-api",
     "human-design",
     "gene-keys",
+    "astrology-api",
     "bodygraph",
+    "hologenetic-profile",
     "astrology",
     "ephemeris",
     "natal-chart",
@@ -45,13 +51,13 @@
   ],
   "author": "Adam Blvck <adam@blvckstudios.com>",
   "license": "MIT",
-  "homepage": "https://rave-engine.netlify.app",
+  "homepage": "https://freehumandesign.netlify.app",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/adamblvck/rave-engine.git"
+    "url": "git+https://github.com/adamblvck/free-human-design.git"
   },
   "bugs": {
-    "url": "https://github.com/adamblvck/rave-engine/issues"
+    "url": "https://github.com/adamblvck/free-human-design/issues"
   },
   "engines": {
     "node": ">=16"

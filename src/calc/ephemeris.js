@@ -1,6 +1,6 @@
 // Ephemeris backend selector.
 //
-// rave-engine is pure-JS by default: the `astronomia` backend needs no native
+// free-human-design is pure-JS by default: the `astronomia` backend needs no native
 // build and no data files. A high-precision `swisseph` backend is available
 // opt-in (EPHE_BACKEND=swisseph) when the native binding + ephemeris files are
 // installed — it is never required.
@@ -25,7 +25,7 @@ function tryLoadSwisseph() {
     if (parseBool(process.env.EPHE_DEBUG) || parseBool(process.env.EPHE_STATUS)) {
       // eslint-disable-next-line no-console
       console.warn(
-        `[rave-engine] EPHE_BACKEND=swisseph requested but unavailable (${e.message.split('\n')[0]}). Falling back to astronomia.`
+        `[free-human-design] EPHE_BACKEND=swisseph requested but unavailable (${e.message.split('\n')[0]}). Falling back to astronomia.`
       );
     }
     return null;

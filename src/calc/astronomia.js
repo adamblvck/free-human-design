@@ -1,6 +1,6 @@
 // Pure-JS ephemeris backend, built on the MIT-licensed `astronomia` package.
 //
-// This is the DEFAULT backend for rave-engine: no native build, no `.se1` data
+// This is the DEFAULT backend for free-human-design: no native build, no `.se1` data
 // files, no AGPL. It reproduces the same apparent geocentric tropical ecliptic
 // longitudes that the Swiss Ephemeris (`SEFLG_SWIEPH`) produces — validated to
 // the exact gate/line in the golden vectors (see test/profile.test.js).

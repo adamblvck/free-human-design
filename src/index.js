@@ -8,6 +8,7 @@ const {
   signedAngleDiff,
 } = require('./calc/profile');
 const { mapLongitudeDegrees, normalizeAngleDegrees } = require('./calc/mandala');
+const { computeMidpoints, midpointOf } = require('./calc/midpoints');
 const { ensureEphePath, getBackend } = require('./calc/ephemeris');
 const { searchTimezones, formatOffset } = require('./timezone/search');
 const { locationForTimezone, resolveLocation } = require('./timezone/location');
@@ -63,6 +64,10 @@ module.exports = {
   // Mandala helpers
   mapLongitudeDegrees,
   normalizeAngleDegrees,
+
+  // Midpoints (advanced)
+  computeMidpoints,
+  midpointOf,
 
   // Human Design bodygraph
   computeBodygraph,

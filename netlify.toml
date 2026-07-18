@@ -1,4 +1,4 @@
-# Netlify config for the rave-engine site + free API.
+# Netlify config for the Free Human Design API site + free API.
 # Static landing page in ./site, serverless API in ./netlify/functions.
 
 [build]
