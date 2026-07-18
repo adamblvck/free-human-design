@@ -1,6 +1,6 @@
 {
   "name": "free-human-design",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Free Human Design API & Gene Keys API — the most tested, Swiss-Ephemeris-validated pure-JS engine for bodygraphs (Type/Authority/Profile), Gene Keys hologenetic profiles and extended astrology (Ascendant/MC/houses). No native build, no ephemeris data files, no birth data leaves your machine.",
   "main": "src/index.js",
   "type": "commonjs",
