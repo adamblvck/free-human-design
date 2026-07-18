@@ -139,7 +139,7 @@ console.log(chart.astrology.angles.ascendant.sign); // "Aries"`;
   /* ---------- Markdown doc for LLM use ---------- */
   const LLM_MARKDOWN = `# Free Human Design API — Human Design, Gene Keys & Astrology API
 
-Free Human Design API is a free, open-source, local-first engine for computing Human Design bodygraphs, Gene Keys hologenetic profiles, and astrology charts (Ascendant, MC, houses). It is the most tested engine of its kind — 216 passing tests, ~90% coverage — validated to the exact gate.line against Swiss Ephemeris, with 99.4% gate agreement against the official Gene Keys engine. Pure JavaScript — no native build, no ephemeris files. MIT licensed.
+Free Human Design API is a free, open-source, local-first engine for computing Human Design bodygraphs, Gene Keys hologenetic profiles, and astrology charts (Ascendant, MC, houses). It is the most tested engine of its kind — 247 passing tests across 13 suites (~90% coverage), five real third-party reference charts (125/130 activations exact), and a 2,000-birth study vs the official Gene Keys engine (99.4% gate / 95.6% line agreement on hologenetic spheres). Pure JavaScript — no native build, no ephemeris files. MIT licensed.
 
 ## Two ways to use it
 

@@ -4,7 +4,7 @@
 
 [![npm version](https://img.shields.io/npm/v/free-human-design.svg)](https://www.npmjs.com/package/free-human-design)
 [![coverage](https://img.shields.io/badge/coverage-90%25-brightgreen.svg)](#tests)
-[![tests](https://img.shields.io/badge/tests-216%20passing-brightgreen.svg)](#tests)
+[![tests](https://img.shields.io/badge/tests-247%20passing-brightgreen.svg)](#tests)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![node](https://img.shields.io/badge/node-%3E%3D16-brightgreen.svg)](package.json)
 [![dependencies](https://img.shields.io/badge/native%20build-none-brightgreen.svg)](#accuracy--precision)
@@ -467,7 +467,7 @@ npm run coverage       # run with a coverage report
 npm run coverage:badge # refresh the coverage badge above from a fresh run
 ```
 
-240+ tests covering: the mandala mapping, regression-locked profiles, the
+247 tests covering: the mandala mapping, regression-locked profiles, the
 bodygraph reference data + derivation, the astronomia backend, the astrology
 angles/houses (verified against the horizon/meridian geometry), the location
 lookup, the end-to-end chart, the **midpoint matrix**, the **deviation-study

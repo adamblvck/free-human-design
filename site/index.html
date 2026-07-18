@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Free Human Design &amp; Gene Keys API — Most Tested, Most Accurate Free Astrology API</title>
-  <meta name="description" content="Free Human Design API &amp; Gene Keys API — the most tested, Swiss-Ephemeris-validated free astrology API. Pure JavaScript, local-only: cast your bodygraph, hologenetic profile and natal chart without your birth data ever leaving your machine. 216 passing tests, exact gate.line accuracy." />
+  <meta name="description" content="Free Human Design API &amp; Gene Keys API — the most tested, Swiss-Ephemeris-validated free astrology API. Pure JavaScript, local-only: cast your bodygraph, hologenetic profile and natal chart without your birth data ever leaving your machine. 247 passing tests, 99.4% gate agreement vs the official Gene Keys engine." />
   <meta name="keywords" content="free human design api, gene keys api, human design api, free human design chart, astrology api, bodygraph calculator, hologenetic profile, gene keys calculator, human design calculator, natal chart api, i ching astrology, rave chart" />
   <link rel="canonical" href="https://freehumandesign.netlify.app/" />
   <meta property="og:title" content="Free Human Design &amp; Gene Keys API — Most Tested, Most Accurate" />
@@ -71,7 +71,7 @@
           {
             "@type": "Question",
             "name": "How accurate are the calculations?",
-            "acceptedAnswer": { "@type": "Answer", "text": "This is the most tested free Human Design engine available: 216 passing tests, ~90% coverage, and planetary positions from the astronomia VSOP87 ephemeris validated to the exact gate and line against Swiss Ephemeris reference charts. A 2,000-birth deviation study against the official Gene Keys engine shows 99.4% gate agreement. Houses and angles support Placidus, Whole-Sign and Equal systems." }
+            "acceptedAnswer": { "@type": "Answer", "text": "This is the most tested free Human Design engine available: 247 passing tests across 13 suites (~90% coverage), planetary positions from the astronomia VSOP87 ephemeris validated to the exact gate and line against Swiss Ephemeris, five real third-party reference charts (125/130 activations exact), and a 2,000-birth deviation study against the official Gene Keys engine showing 99.4% gate and 95.6% line agreement on hologenetic spheres. Houses and angles support Placidus, Whole-Sign and Equal systems." }
           },
           {
             "@type": "Question",
@@ -108,6 +108,7 @@
       <div class="nav-links">
         <a href="#demo">Live API</a>
         <a href="#charts">Charts</a>
+        <a href="#accuracy">Accuracy</a>
         <a href="#api">Docs</a>
         <a href="https://www.npmjs.com/package/free-human-design" target="_blank" rel="noopener">npm</a>
         <a class="nav-cta" href="https://github.com/adamblvck/free-human-design" target="_blank" rel="noopener">GitHub</a>
@@ -148,9 +149,9 @@
         <a href="https://github.com/adamblvck/free-human-design" target="_blank" rel="noopener" class="btn btn-ghost">GitHub ↗</a>
       </div>
       <div class="trust">
-        <span><span class="dot"></span> 216 passing tests · ~90% coverage</span>
+        <span><span class="dot"></span> 247 passing tests · ~90% coverage</span>
         <span><span class="dot"></span> 99.4% gate agreement vs official Gene Keys engine</span>
-        <span><span class="dot"></span> Validated vs Swiss Ephemeris</span>
+        <span><span class="dot"></span> 2,000-birth Swiss Ephemeris study</span>
         <span><span class="dot"></span> No data leaves your machine · MIT</span>
       </div>
     </div>
@@ -282,6 +283,82 @@
             <span><i class="sw sw-ven"></i> Venus</span>
             <span><i class="sw sw-pea"></i> Pearl</span>
           </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Accuracy & testing ===== -->
+  <section id="accuracy">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">Proven, not promised</div>
+        <h2>The most tested free Human Design engine</h2>
+        <p>More than good-enough astrology: every gate.line is regression-locked against Swiss Ephemeris, five real third-party charts, and a 2,000-birth study vs the official Gene Keys engine.</p>
+      </div>
+
+      <div class="proof-kpis" aria-label="Accuracy and testing metrics">
+        <div class="proof-kpi">
+          <div class="v">247</div>
+          <div class="k">Passing tests</div>
+          <div class="d">13 suites · Jest CI on every publish</div>
+        </div>
+        <div class="proof-kpi">
+          <div class="v">~90%</div>
+          <div class="k">Code coverage</div>
+          <div class="d">Mandala, bodygraph, houses, timezones</div>
+        </div>
+        <div class="proof-kpi">
+          <div class="v">99.4%</div>
+          <div class="k">Gate agreement</div>
+          <div class="d">Gene Keys spheres vs official engine</div>
+        </div>
+        <div class="proof-kpi">
+          <div class="v">95.6%</div>
+          <div class="k">Line agreement</div>
+          <div class="d">Same 2,000-birth study · 14 spheres</div>
+        </div>
+        <div class="proof-kpi">
+          <div class="v">2,000</div>
+          <div class="k">Births compared</div>
+          <div class="d">1600–2200 AD · 30 timezones · 52k placements</div>
+        </div>
+        <div class="proof-kpi">
+          <div class="v">125/130</div>
+          <div class="k">Exact gate.line</div>
+          <div class="d">5 real charts vs third-party Swiss Ephemeris calc</div>
+        </div>
+      </div>
+
+      <div class="proof-grid">
+        <div class="proof-block">
+          <h3>What the suite covers</h3>
+          <ul class="proof-list">
+            <li><strong>Swiss Ephemeris golden vectors</strong> — gate, line and retrograde locked in <code>profile.test.js</code></li>
+            <li><strong>Five real reference charts</strong> — independent third-party calculator; remainders within one line</li>
+            <li><strong>Official Gene Keys engine study</strong> — same birth moments vs <code>genekeysExperimentalV2</code> (the Hologenetic Profiler)</li>
+            <li><strong>Full bodygraph derivation</strong> — activated gates, channels, centers, Type, Authority, Profile</li>
+            <li><strong>Astrology geometry</strong> — Ascendant / MC / houses (Placidus, Whole Sign, Equal)</li>
+            <li><strong>Historical IANA timezones</strong> — 20th-century DST edge cases regression-locked</li>
+            <li><strong>Midpoint matrix</strong> — 325 shorter-arc pairs over the 26 activations</li>
+          </ul>
+        </div>
+        <div class="proof-block">
+          <h3>Vs official Gene Keys engine</h3>
+          <p class="proof-lede">Hologenetic spheres only (the keys a real profile uses) — median Δ <strong>0.01′</strong> (≈ 0.6″), well inside a Gene Keys line (0.9375°).</p>
+          <table class="proof-table">
+            <thead>
+              <tr><th>Metric</th><th>Gene Keys spheres</th><th>All 26 bodies</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Median Δ</td><td><strong>0.01′</strong></td><td>0.02′</td></tr>
+              <tr><td>p95 Δ</td><td><strong>0.17′</strong></td><td>10.8′</td></tr>
+              <tr><td>Gate agreement</td><td><strong>99.4%</strong></td><td>98.8%</td></tr>
+              <tr><td>Line agreement</td><td><strong>95.6%</strong></td><td>92.6%</td></tr>
+            </tbody>
+          </table>
+          <p class="proof-note">Sun &amp; planets typically match Swiss Ephemeris within <strong>&lt;1″</strong>; Moon ~10″. Pure JS (astronomia VSOP87) by default — optional <code>swisseph</code> backend if you need AGPL precision.</p>
+          <a class="btn btn-ghost" href="https://github.com/adamblvck/free-human-design#accuracy--precision" target="_blank" rel="noopener">Full accuracy docs on GitHub ↗</a>
         </div>
       </div>
     </div>
@@ -437,7 +514,7 @@ console.log(chart.astrology.angles.ascendant.sign); // "Aries"</pre>
         </details>
         <details>
           <summary>How accurate are the calculations?</summary>
-          <p>This is the <strong>most tested free Human Design engine</strong> available: 216 passing tests and ~90% coverage. Planetary positions come from the astronomia VSOP87 ephemeris and are validated to the exact <em>gate.line</em> against Swiss Ephemeris reference charts. A 2,000-birth deviation study against the official Gene Keys engine shows <strong>99.4% gate agreement</strong>. Houses and angles support Placidus, Whole-Sign and Equal systems.</p>
+          <p>This is the <strong>most tested free Human Design engine</strong> available: <strong>247 passing tests</strong> across 13 suites (~90% coverage). Planetary positions come from the astronomia VSOP87 ephemeris and are validated to the exact <em>gate.line</em> against Swiss Ephemeris — including five real third-party charts (125/130 activations exact). A 2,000-birth deviation study against the official Gene Keys engine shows <strong>99.4% gate</strong> and <strong>95.6% line</strong> agreement on hologenetic spheres. See the <a href="#accuracy">Accuracy</a> section for the full breakdown.</p>
         </details>
         <details>
           <summary>Does my birth data stay private?</summary>
