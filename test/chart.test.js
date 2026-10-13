@@ -62,6 +62,21 @@ describe('computeChart shape & cross-section consistency', () => {
   });
 });
 
+// The /api/chart and /api/humandesign payloads come straight from computeChart.
+describe('computeChart definition — 1992-12-09 00:35 Europe/Brussels', () => {
+  it('reports single definition, 1 group, 3 channels', () => {
+    const hd = computeChart({
+      birthdate: '1992-12-09',
+      birthtime: '00:35',
+      timezone: 'Europe/Brussels',
+    }).humanDesign;
+    expect(hd.definition).toBe('single');
+    expect(hd.definitionGroups).toBe(1);
+    expect(hd.channelCount).toBe(3);
+    expect(hd.definitionCount).toBe(3);
+  });
+});
+
 // A second, independent regression chart to catch cross-cutting drift.
 describe('computeChart regression — 1991-12-25 09:15 Europe/London', () => {
   let chart;
@@ -78,7 +93,10 @@ describe('computeChart regression — 1991-12-25 09:15 Europe/London', () => {
     expect(hd.type).toBe('Manifesting Generator');
     expect(hd.authority).toBe('Sacral');
     expect(hd.profile).toBe('6/2');
-    expect(hd.definitionCount).toBe(4);
+    expect(hd.definition).toBe('single');
+    expect(hd.definitionGroups).toBe(1);
+    expect(hd.channelCount).toBe(4);
+    expect(hd.definitionCount).toBe(4); // deprecated alias of channelCount
     expect(hd.definedChannels.map((c) => c.key).sort()).toEqual(
       ['10-20', '10-57', '20-57', '29-46']
     );

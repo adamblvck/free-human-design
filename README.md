@@ -4,7 +4,7 @@
 
 [![npm version](https://img.shields.io/npm/v/free-human-design.svg)](https://www.npmjs.com/package/free-human-design)
 [![coverage](https://img.shields.io/badge/coverage-90%25-brightgreen.svg)](#tests)
-[![tests](https://img.shields.io/badge/tests-247%20passing-brightgreen.svg)](#tests)
+[![tests](https://img.shields.io/badge/tests-259%20passing-brightgreen.svg)](#tests)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![node](https://img.shields.io/badge/node-%3E%3D16-brightgreen.svg)](package.json)
 [![dependencies](https://img.shields.io/badge/native%20build-none-brightgreen.svg)](#accuracy--precision)
@@ -18,8 +18,8 @@ computes:
   Hologenetic Profile (`lifeswork`, `purpose`, `pearl`, `iq`, `eq`, …).
 - ⚡ **Human Design** — the full bodygraph: every planetary gate activation
   (13 bodies × Personality + Design), **activated gates**, **defined channels**,
-  **defined centers**, **open centers**, and the derived **Type**, **Authority**
-  and **Profile**.
+  **defined centers**, **open centers**, and the derived **Type**, **Authority**,
+  **Profile** and **Definition**.
 - 🪐 **Astrology** — **Ascendant**, **Descendant**, **Midheaven (MC)**,
   **IC**, and house cusps (**Placidus**, **Whole Sign** or **Equal**).
 
@@ -65,7 +65,7 @@ console.log(chart.astrology.angles.ascendant.sign); // 'Sagittarius'
   "input": {
     "birthdate": "1972-08-02", "birthtime": "14:30", "timezone": "Asia/Bangkok",
     "birth_utc": "1972-08-02T07:30:00.000Z",
-    "location": { "lat": 13.75, "lng": 100.51, "city": "Bangkok", "source": "timezone-city" }
+    "location": { "lat": 13.75, "lng": 100.52, "city": "Bangkok", "source": "timezone-city" }
   },
 
   "geneKeys": {
@@ -86,26 +86,29 @@ console.log(chart.astrology.angles.ascendant.sign); // 'Sagittarius'
     "type": "Manifesting Generator",
     "authority": "Sacral",
     "profile": "3/5",
-    "definitionCount": 6,
-    "activatedGates": [4, 10, 11, 12, 16, 19, 24, 33, 34, 44, 45, 48, 51, 56, 57, 58, 60, 61, 62],
-    "definedChannels": [{ "key": "34-57", "gates": [34, 57], "centers": ["sacral", "spleen"], "name": "Power" }, "…"],
+    "definition": "single",
+    "definitionGroups": 1,
+    "channelCount": 6,
+    "definitionCount": 6, // deprecated: the channel count, see below
+    "activatedGates": [4, 10, 11, 12, 16, 19, 24, 33, 34, 44, 45, 46, 48, 51, 56, 57, 58, 60, 61, 62],
+    "definedChannels": [{ "key": "10-34", "gates": [10, 34], "centers": ["g", "sacral"], "name": "Exploration" }, "…"],
     "definedCenters": ["head", "ajna", "throat", "g", "sacral", "spleen"],
     "openCenters": ["heart", "solarplexus", "root"],
     "centers": { "head": true, "ajna": true, "…": "…" },
-    "p_": { "sun": { "gate": 33, "line": 3, "color": 4, "retrograde": false, "longitude": 130.09, "…": "…" }, "…": "…" },
+    "p_": { "sun": { "gate": 33, "line": 3, "color": 1, "retrograde": false, "longitude": 130.09, "…": "…" }, "…": "…" },
     "d_": { "…": "…" },
     "activations": { "personality": [ "…13 bodies…" ], "design": [ "…13 bodies…" ] }
   },
 
   "astrology": {
-    "location": { "lat": 13.75, "lng": 100.51, "city": "Bangkok" },
+    "location": { "lat": 13.75, "lng": 100.52, "city": "Bangkok" },
     "angles": {
-      "ascendant":  { "longitude": 249.97, "sign": "Sagittarius", "degInSign": 9.97, "gateLine": { "gate": 9, "line": 5 } },
+      "ascendant":  { "longitude": 249.99, "sign": "Sagittarius", "degInSign": 9.99, "gateLine": { "gate": 9, "line": 5 } },
       "descendant": { "sign": "Gemini",      "…": "…" },
       "mc":         { "sign": "Virgo",       "…": "…" },
       "ic":         { "sign": "Pisces",      "…": "…" }
     },
-    "houses": { "system": "placidus", "cusps": [ { "house": 1, "longitude": 249.97, "sign": "Sagittarius" }, "…" ] }
+    "houses": { "system": "placidus", "cusps": [ { "house": 1, "longitude": 249.99, "sign": "Sagittarius" }, "…" ] }
   }
 }
 ```
@@ -192,7 +195,30 @@ hd.openCenters;      // the rest
 hd.type;             // Generator | Manifesting Generator | Projector | Manifestor | Reflector
 hd.authority;        // Emotional | Sacral | Splenic | Ego | Self-Projected | Mental | Lunar
 hd.profile;          // e.g. '3/5'  (Personality Sun line / Design Sun line)
+hd.definition;       // none | single | split | triple split | quadruple split
+hd.definitionGroups; // 0–4: how many separate groups the defined centers form
+hd.channelCount;     // how many channels are defined
 ```
+
+**Definition** counts the separate groups of defined centers, with the defined
+channels as the links between them; it is not the number of channels. The
+1992-12-09 00:35 Brussels chart has three channels (47-64, 11-56, 12-22), but
+they chain Head, Ajna, Throat and Solar Plexus into one group: `single`. Two
+channels that share no center (say G–Heart and Solar Plexus–Root) make a `split`.
+A chart with no defined channels (a Reflector) is `none`. To get the groups
+themselves:
+
+```js
+const { computeDefinition } = require('free-human-design');
+computeDefinition(hd.definedChannels);
+// { definition: 'single', groups: [['head', 'ajna', 'throat', 'solarplexus']] }
+```
+
+> **Deprecated: `definitionCount`.** Up to 1.0.x this was the only field, and
+> despite its name it has always held the number of defined channels. It still
+> does, so nothing breaks, but it will be removed in the next major version.
+> Read `channelCount` for the channel count and `definition` /
+> `definitionGroups` for the Human Design definition.
 
 Reference data (gate→center map and the 36 channels) is the standard Human
 Design bodygraph and is exported for your own use:
@@ -273,7 +299,7 @@ The astrology section needs a **place of birth**. You have two options:
    the most-populous city in that timezone, which is plenty for an Ascendant:
    ```js
    computeChart({ birthdate, birthtime, timezone: 'Asia/Bangkok' });
-   // → location { city: 'Bangkok', lat: 13.75, lng: 100.51, source: 'timezone-city' }
+   // → location { city: 'Bangkok', lat: 13.75, lng: 100.52, source: 'timezone-city' }
    ```
 
 Coordinates use **north-positive latitude** and **east-positive longitude**.
@@ -444,7 +470,8 @@ available.
 | --- | --- |
 | `computeChart(input)` | Full `{ input, geneKeys, humanDesign, astrology, _meta }` |
 | `computeProfile(input)` | `{ input, engine: { p_, d_, spheres, _meta } }` (back-compat) |
-| `computeBodygraph(activations)` | `{ type, authority, profile, activatedGates, definedChannels, definedCenters, openCenters, centers, … }` |
+| `computeBodygraph(activations)` | `{ type, authority, profile, definition, definitionGroups, channelCount, activatedGates, definedChannels, definedCenters, openCenters, centers, … }` |
+| `computeDefinition(definedChannels)` | `{ definition, groups }`, the connected groups of defined centers |
 | `computeActivations({ birthUtc })` | The 26 raw activations (`{ personality, design }`) |
 | `computeMidpoints(points)` | Midpoint `{ points, pairs, matrix, _meta }` over labelled `{ key, longitude }` points |
 | `computeAngles({ jdUT, lat, lng })` | `{ ascendant, descendant, mc, ic }` |
@@ -467,7 +494,7 @@ npm run coverage       # run with a coverage report
 npm run coverage:badge # refresh the coverage badge above from a fresh run
 ```
 
-247 tests covering: the mandala mapping, regression-locked profiles, the
+259 tests covering: the mandala mapping, regression-locked profiles, the
 bodygraph reference data + derivation, the astronomia backend, the astrology
 angles/houses (verified against the horizon/meridian geometry), the location
 lookup, the end-to-end chart, the **midpoint matrix**, the **deviation-study

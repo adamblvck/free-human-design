@@ -189,6 +189,51 @@ function motorConnectsToThroatFrom(start, definedCentersSet, definedChannels) {
   return false;
 }
 
+// Definition = how many separate groups the defined centers form, with the
+// defined channels as the links between them. Nine centers and at least two
+// per group cap it at four.
+const DEFINITION_LABELS = ['none', 'single', 'split', 'triple split', 'quadruple split'];
+
+/**
+ * Group the defined centers into their connected components.
+ *
+ * @param {Array<{ centers: [string, string] }>} definedChannels
+ * @returns {{
+ *   definition: 'none'|'single'|'split'|'triple split'|'quadruple split',
+ *   groups: string[][]
+ * }}  groups (and the centers inside each) follow CENTERS order
+ */
+function computeDefinition(definedChannels) {
+  const adj = new Map();
+  for (const ch of definedChannels) {
+    const [c1, c2] = ch.centers;
+    if (!adj.has(c1)) adj.set(c1, new Set());
+    if (!adj.has(c2)) adj.set(c2, new Set());
+    adj.get(c1).add(c2);
+    adj.get(c2).add(c1);
+  }
+  // BFS from each not-yet-grouped defined center collects one group.
+  const seen = new Set();
+  const groups = [];
+  for (const start of CENTERS) {
+    if (!adj.has(start) || seen.has(start)) continue;
+    const group = new Set([start]);
+    const queue = [start];
+    while (queue.length) {
+      const cur = queue.shift();
+      for (const nxt of adj.get(cur)) {
+        if (!group.has(nxt)) {
+          group.add(nxt);
+          queue.push(nxt);
+        }
+      }
+    }
+    group.forEach((c) => seen.add(c));
+    groups.push(CENTERS.filter((c) => group.has(c)));
+  }
+  return { definition: DEFINITION_LABELS[groups.length], groups };
+}
+
 /**
  * Derive a full Human Design bodygraph from planetary activations.
  *
@@ -200,7 +245,10 @@ function motorConnectsToThroatFrom(start, definedCentersSet, definedChannels) {
  *   type: string,
  *   authority: string,
  *   profile: string,
- *   definitionCount: number,
+ *   definition: 'none'|'single'|'split'|'triple split'|'quadruple split',
+ *   definitionGroups: number,
+ *   channelCount: number,
+ *   definitionCount: number,  // deprecated: same as channelCount
  *   activatedGates: number[],
  *   definedChannels: Array<{ key, gates, centers, name }>,
  *   definedCenters: string[],
@@ -244,10 +292,19 @@ function computeBodygraph(activations) {
   const dSun = design.find((a) => a.body === 'sun');
   const profile = pSun && dSun ? `${pSun.line}/${dSun.line}` : null;
 
+  const { definition, groups } = computeDefinition(definedChannels);
+
   return {
     type: determineType(definedCentersSet, definedChannels),
     authority: determineAuthority(definedCentersSet, definedChannels),
     profile,
+    definition,
+    definitionGroups: groups.length,
+    channelCount: definedChannels.length,
+    // Deprecated: despite the name this has always been the number of defined
+    // channels, not the Human Design definition. Kept unchanged for existing
+    // callers until the next major; use `channelCount`, or `definition` /
+    // `definitionGroups`.
     definitionCount: definedChannels.length,
     activatedGates,
     definedChannels,
@@ -266,5 +323,7 @@ module.exports = {
   CHANNELS,
   CHANNEL_NAMES,
   channelKey,
+  DEFINITION_LABELS,
+  computeDefinition,
   computeBodygraph,
 };

@@ -124,22 +124,22 @@
   const JS_USAGE = `const { computeChart } = require('free-human-design');
 
 const chart = computeChart({
-  birthdate: '1990-04-16',
-  birthtime: '05:35',
-  timezone: 'Europe/Brussels',
+  birthdate: '1972-08-02',
+  birthtime: '14:30',
+  timezone: 'Asia/Bangkok',
 });
 
-console.log(chart.humanDesign.type);             // "Manifesting Generator"
-console.log(chart.humanDesign.profile);          // "6/2"
-console.log(chart.geneKeys.spheres.lifeswork.gk); // 13
-console.log(chart.astrology.angles.ascendant.sign); // "Aries"`;
+console.log(chart.humanDesign.type);                // "Manifesting Generator"
+console.log(chart.humanDesign.profile);             // "3/5"
+console.log(chart.geneKeys.spheres.lifeswork.gk);   // 33
+console.log(chart.astrology.angles.ascendant.sign); // "Sagittarius"`;
   const copyUsage = $('#copyUsageBtn');
   if (copyUsage) copyUsage.addEventListener('click', () => copy(JS_USAGE, 'Usage snippet copied'));
 
   /* ---------- Markdown doc for LLM use ---------- */
   const LLM_MARKDOWN = `# Free Human Design API — Human Design, Gene Keys & Astrology API
 
-Free Human Design API is a free, open-source, local-first engine for computing Human Design bodygraphs, Gene Keys hologenetic profiles, and astrology charts (Ascendant, MC, houses). It is the most tested engine of its kind — 247 passing tests across 13 suites (~90% coverage), five real third-party reference charts (125/130 activations exact), and a 2,000-birth study vs the official Gene Keys engine (99.4% gate / 95.6% line agreement on hologenetic spheres). Pure JavaScript — no native build, no ephemeris files. MIT licensed.
+Free Human Design API is a free, open-source, local-first engine for computing Human Design bodygraphs, Gene Keys hologenetic profiles, and astrology charts (Ascendant, MC, houses). It is the most tested engine of its kind — 259 passing tests across 13 suites (~90% coverage), five real third-party reference charts (125/130 activations exact), and a 2,000-birth study vs the official Gene Keys engine (99.4% gate / 95.6% line agreement on hologenetic spheres). Pure JavaScript — no native build, no ephemeris files. MIT licensed.
 
 ## Two ways to use it
 
@@ -153,30 +153,31 @@ npm install free-human-design
 const { computeChart } = require('free-human-design');
 
 const chart = computeChart({
-  birthdate: '1990-04-16',
-  birthtime: '05:35',
-  timezone: 'Europe/Brussels',
+  birthdate: '1972-08-02',
+  birthtime: '14:30',
+  timezone: 'Asia/Bangkok',
 });
 
 chart.humanDesign.type;                       // "Manifesting Generator"
 chart.humanDesign.authority;                  // "Sacral"
-chart.humanDesign.profile;                    // "6/2"
-chart.humanDesign.definedCenters;             // ["throat","g","sacral", ...]
-chart.geneKeys.spheres.lifeswork;             // { gk: 13, line: 4, ... }
-chart.astrology.angles.ascendant.sign;        // "Aries"
-chart.astrology.angles.ascendant.degInSign;   // 25.3
+chart.humanDesign.profile;                    // "3/5"
+chart.humanDesign.definition;                 // "single"
+chart.humanDesign.definedCenters;             // ["head","ajna","throat","g","sacral","spleen"]
+chart.geneKeys.spheres.lifeswork;             // { gk: 33, line: 3 }
+chart.astrology.angles.ascendant.sign;        // "Sagittarius"
+chart.astrology.angles.ascendant.degInSign;   // 9.99
 \`\`\`
 
 CLI:
 
 \`\`\`bash
-npx free-human-design --chart --date 1990-04-16 --time 05:35 --tz Europe/Brussels
+npx free-human-design --chart --date 1972-08-02 --time 14:30 --tz Asia/Bangkok
 \`\`\`
 
 ### 2. Online (REST API) — no API key, open CORS
 
 \`\`\`bash
-curl "https://freehumandesign.netlify.app/api/chart?date=1990-04-16&time=05:35&tz=Europe/Brussels"
+curl "https://freehumandesign.netlify.app/api/chart?date=1972-08-02&time=14:30&tz=Asia/Bangkok"
 \`\`\`
 
 | Endpoint          | Returns                                                     |
@@ -197,36 +198,42 @@ Add \`?midpoints=1\` (alias \`?advanced=1\`) to any chart route to include \`hum
 
 \`\`\`json
 {
-  "input": { "birthdate": "1990-04-16", "birthtime": "05:35", "timezone": "Europe/Brussels" },
+  "input": { "birthdate": "1972-08-02", "birthtime": "14:30", "timezone": "Asia/Bangkok" },
   "humanDesign": {
     "type": "Manifesting Generator",
     "authority": "Sacral",
-    "profile": "6/2",
-    "definedCenters": ["throat", "g", "sacral", "solarplexus", "root"],
-    "gateActivations": { "1": [{ "stream": "personality", "gate": 1, "line": 4 }], "...": "..." },
-    "centers": { "head": false, "ajna": false, "throat": true, "...": "..." }
+    "profile": "3/5",
+    "definition": "single",
+    "definitionGroups": 1,
+    "channelCount": 6,
+    "definedCenters": ["head", "ajna", "throat", "g", "sacral", "spleen"],
+    "gateActivations": { "4": [{ "stream": "personality", "body": "mercury", "line": 1 }, { "stream": "personality", "body": "mars", "line": 4 }], "...": "..." },
+    "centers": { "head": true, "ajna": true, "throat": true, "...": "..." }
   },
   "geneKeys": {
     "spheres": {
-      "lifeswork": { "gk": 13, "line": 4 },
-      "evolution": { "gk": 7, "line": 3 },
-      "radiance":  { "gk": 2, "line": 5 },
-      "purpose":   { "gk": 32, "line": 1 },
-      "attraction":{ "gk": 9, "line": 6 },
-      "iq":        { "gk": 47, "line": 2 },
-      "eq":        { "gk": 6, "line": 5 },
-      "sq":        { "gk": 36, "line": 1 },
-      "core":      { "gk": 31, "line": 5 },
-      "culture":   { "gk": 8, "line": 1 },
-      "pearl":     { "gk": 4, "line": 6 }
+      "lifeswork":  { "gk": 33, "line": 3 },
+      "evolution":  { "gk": 19, "line": 3 },
+      "radiance":   { "gk": 24, "line": 5 },
+      "purpose":    { "gk": 44, "line": 5 },
+      "iq":         { "gk": 12, "line": 6 },
+      "eq":         { "gk": 4, "line": 4 },
+      "pearl":      { "gk": 10, "line": 2 },
+      "relating":   { "gk": 4, "line": 1 },
+      "attraction": { "gk": 11, "line": 3 },
+      "sq":         { "gk": 12, "line": 3 },
+      "core":       { "gk": 12, "line": 1 },
+      "culture":    { "gk": 58, "line": 5 },
+      "stability":  { "gk": 16, "line": 1 },
+      "creativity": { "gk": 57, "line": 1 }
     }
   },
   "astrology": {
     "angles": {
-      "ascendant": { "sign": "Aries", "degInSign": 25.3, "longitude": 25.3 },
-      "mc":        { "sign": "Capricorn", "degInSign": 12.7, "longitude": 282.7 }
+      "ascendant": { "sign": "Sagittarius", "degInSign": 9.99, "longitude": 249.99 },
+      "mc":        { "sign": "Virgo", "degInSign": 12.65, "longitude": 162.65 }
     },
-    "houses": { "cusps": [ { "house": 1, "longitude": 25.3 }, "..." ] }
+    "houses": { "system": "placidus", "cusps": [ { "house": 1, "longitude": 249.99, "sign": "Sagittarius" }, "..." ] }
   }
 }
 \`\`\`

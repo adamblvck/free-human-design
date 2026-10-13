@@ -79,7 +79,10 @@ function computeChart(input) {
     type: bodygraph.type,
     authority: bodygraph.authority,
     profile: bodygraph.profile,
-    definitionCount: bodygraph.definitionCount,
+    definition: bodygraph.definition,
+    definitionGroups: bodygraph.definitionGroups,
+    channelCount: bodygraph.channelCount,
+    definitionCount: bodygraph.definitionCount, // deprecated: same as channelCount
     p_: engine.p_,
     d_: engine.d_,
     activations: { personality: activations.personality, design: activations.design },

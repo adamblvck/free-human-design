@@ -107,6 +107,7 @@ function buildPrompt(chart) {
   lines.push(`- Type: ${hd.type}`);
   lines.push(`- Strategy/Authority: ${hd.authority}`);
   lines.push(`- Profile: ${hd.profile}`);
+  lines.push(`- Definition: ${hd.definition}`);
   lines.push(`- Defined centers: ${hd.definedCenters.join(', ') || 'none'}`);
   lines.push(`- Open centers: ${hd.openCenters.join(', ') || 'none'}`);
   lines.push(`- Defined channels: ${hd.definedChannels.map((c) => c.key + (c.name ? ` (${c.name})` : '')).join(', ') || 'none'}`);

@@ -18,6 +18,7 @@ const {
   GATE_CENTER,
   CHANNELS,
   computeBodygraph,
+  computeDefinition,
 } = require('./hd/bodygraph');
 const { computeAngles, computeHouses, signOf, SIGNS } = require('./hd/houses');
 const { computeChart } = require('./chart');
@@ -71,6 +72,7 @@ module.exports = {
 
   // Human Design bodygraph
   computeBodygraph,
+  computeDefinition,
   CENTERS,
   CENTER_LABELS,
   GATE_CENTER,

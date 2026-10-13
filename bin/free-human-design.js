@@ -98,7 +98,7 @@ function printChartSummary(chart) {
   lines.push(`  Type:      ${hd.type}`);
   lines.push(`  Authority: ${hd.authority}`);
   lines.push(`  Profile:   ${hd.profile}`);
-  lines.push(`  Definition:${hd.definitionCount} channels`);
+  lines.push(`  Definition: ${hd.definition} (${hd.channelCount} channels)`);
   lines.push(`  Defined centers: ${hd.definedCenters.join(', ') || '(none)'}`);
   lines.push(`  Open centers:    ${hd.openCenters.join(', ') || '(none)'}`);
   lines.push(`  Channels: ${hd.definedChannels.map((c) => `${c.key}${c.name ? ` (${c.name})` : ''}`).join(', ') || '(none)'}`);

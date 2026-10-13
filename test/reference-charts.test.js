@@ -133,34 +133,40 @@ const EXPECTED_BODYGRAPH = {
   '1992-12-09 00:35 Brussels': {
     type: 'Manifestor', authority: 'Emotional (Solar Plexus)', profile: '1/3',
     definedCenters: ['head', 'ajna', 'throat', 'solarplexus'],
+    definition: 'single', // 47-64, 11-56, 12-22 chain Head→Ajna→Throat→Solar Plexus
   },
   '1969-03-11 03:00 Chicago': {
     type: 'Projector', authority: 'Emotional (Solar Plexus)', profile: '4/6',
     definedCenters: ['g', 'heart', 'solarplexus', 'root'],
+    definition: 'split', // G–Heart (25-51) | Solar Plexus–Root (30-41)
   },
   '1960-09-12 07:35 San Diego': {
     type: 'Manifesting Generator', authority: 'Emotional (Solar Plexus)', profile: '3/6',
     definedCenters: ['head', 'ajna', 'throat', 'sacral', 'solarplexus', 'spleen', 'root'],
+    definition: 'triple split', // Head–Ajna | Throat–Solar Plexus | Sacral–Root–Spleen
   },
   '1974-08-02 12:00 Boise': {
     type: 'Generator', authority: 'Emotional (Solar Plexus)', profile: '3/5',
     definedCenters: ['heart', 'sacral', 'solarplexus', 'spleen', 'root'],
+    definition: 'split', // Sacral–Solar Plexus–Root | Heart–Spleen (26-44)
   },
   '1970-06-04 04:00 Poznan': {
     type: 'Manifesting Generator', authority: 'Emotional (Solar Plexus)', profile: '2/4',
     definedCenters: ['throat', 'g', 'heart', 'sacral', 'solarplexus', 'spleen', 'root'],
+    definition: 'split', // G–Sacral–Spleen | Throat–Solar Plexus–Heart–Root
   },
 };
 
 describe('reference charts — derived bodygraph', () => {
   for (const chart of CHARTS) {
     const exp = EXPECTED_BODYGRAPH[chart.name];
-    it(`${chart.name}: ${exp.type}, ${exp.authority}, ${exp.profile}`, () => {
+    it(`${chart.name}: ${exp.type}, ${exp.authority}, ${exp.profile}, ${exp.definition}`, () => {
       const bg = computeBodygraph(computeActivations({ birthUtc: parseBirthToUtc(chart.birth) }));
       expect(bg.type).toBe(exp.type);
       expect(bg.authority).toBe(exp.authority);
       expect(bg.profile).toBe(exp.profile);
       expect(bg.definedCenters).toEqual(exp.definedCenters);
+      expect(bg.definition).toBe(exp.definition);
     });
   }
 });
