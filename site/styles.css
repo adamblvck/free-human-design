@@ -140,7 +140,8 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.1; lett
 .btn-ghost { background: transparent; }
 
 /* ---------- Hero ---------- */
-.hero { position: relative; padding: 92px 0 64px; text-align: center; }
+/* clip x only: the ring stays wider than a phone without scrolling the page, and still bleeds above */
+.hero { position: relative; padding: 92px 0 64px; text-align: center; overflow-x: clip; }
 .hero-ring {
   position: absolute; top: -40px; left: 50%; transform: translateX(-50%);
   width: 680px; max-width: 130vw; opacity: 0.5; z-index: -1; pointer-events: none;
