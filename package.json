@@ -1,0 +1,68 @@
+{
+  "name": "free-human-design",
+  "version": "2.0.0",
+  "description": "Pure-JS chart engine: I-Ching hexagram and line for every planetary placement, a full bodygraph (Type/Authority/Profile) and extended astrology (Ascendant/MC/houses). No native build, no ephemeris data files, no birth data leaves your machine.",
+  "main": "src/index.js",
+  "type": "commonjs",
+  "bin": {
+    "free-human-design": "bin/free-human-design.js"
+  },
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src",
+    "bin",
+    "README.md",
+    "LICENSE",
+    "NOTICE"
+  ],
+  "scripts": {
+    "test": "jest",
+    "coverage": "jest --coverage",
+    "coverage:badge": "jest --coverage && node scripts/make-coverage-badge.js",
+    "cli": "node bin/free-human-design.js",
+    "prepublishOnly": "jest"
+  },
+  "keywords": [
+    "astrology-api",
+    "bodygraph",
+    "hexagram-profile",
+    "astrology",
+    "ephemeris",
+    "natal-chart",
+    "ascendant",
+    "midheaven",
+    "houses",
+    "placidus",
+    "i-ching",
+    "hexagram",
+    "gates",
+    "channels",
+    "centers",
+    "timezone"
+  ],
+  "author": "Adam Blvck <adam@blvckstudios.com>",
+  "license": "MIT",
+  "homepage": "https://freehumandesign.blvckstudios.com/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adamblvck/free-human-design.git"
+  },
+  "bugs": {
+    "url": "https://github.com/adamblvck/free-human-design/issues"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "dependencies": {
+    "@vvo/tzdb": "^6.157.0",
+    "astronomia": "^4.2.0",
+    "city-timezones": "^1.3.0",
+    "luxon": "^3.5.0"
+  },
+  "devDependencies": {
+    "jest": "^30.3.0"
+  }
+}

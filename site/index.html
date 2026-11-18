@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>free-human-design — Free, Open-Source Astrology API</title>
+  <meta name="description" content="free-human-design — a carefully tested free astrology API, validated against Swiss Ephemeris. Pure JavaScript, local-only: cast your bodygraph, hexagram profile and natal chart without your birth data ever leaving your machine. 259 passing tests, 99.4% gate agreement vs the reference engine." />
+  <meta name="keywords" content="astrology api, natal chart api, bodygraph calculator, hexagram profile, i ching astrology, ephemeris, open source" />
+  <link rel="canonical" href="https://freehumandesign.netlify.app/" />
+  <meta property="og:title" content="free-human-design — Free and Open Source" />
+  <meta property="og:description" content="A carefully tested, Swiss-Ephemeris-validated free hexagram, bodygraph &amp; astrology API. Pure JS, local-only, MIT licensed, AI-ready. Your birth data never leaves your machine." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://freehumandesign.netlify.app/" />
+  <meta property="og:site_name" content="free-human-design" />
+  <meta property="og:image" content="https://freehumandesign.netlify.app/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="free-human-design — Free and Open Source" />
+  <meta name="twitter:description" content="A carefully tested, Swiss-Ephemeris-validated free hexagram, bodygraph and astrology API. Pure JavaScript. Your birth data never leaves your machine." />
+  <meta name="twitter:image" content="https://freehumandesign.netlify.app/og.png" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" href="fonts/astrodot.ttf" as="font" type="font/ttf" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,600&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "name": "free-human-design",
+        "url": "https://freehumandesign.netlify.app/",
+        "logo": "https://freehumandesign.netlify.app/og.png",
+        "description": "A carefully tested free hexagram, bodygraph and astrology API. Local-only, Swiss-Ephemeris-validated, open source.",
+        "founder": { "@type": "Person", "name": "Adam Blvck", "url": "https://blvckstudios.com" }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "free-human-design",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any",
+        "description": "A carefully tested, Swiss-Ephemeris-validated free hexagram, bodygraph and astrology API. Pure JavaScript, local-only calculation of bodygraphs, hexagram profiles and natal charts.",
+        "url": "https://freehumandesign.netlify.app/",
+        "downloadUrl": "https://www.npmjs.com/package/free-human-design",
+        "license": "https://opensource.org/licenses/MIT",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "author": { "@type": "Person", "name": "Adam Blvck", "url": "https://blvckstudios.com" }
+      },
+      {
+        "@type": "WebAPI",
+        "name": "free-human-design",
+        "description": "Free REST API for bodygraph charts, hexagram profiles and astrology houses & angles. Plain GET endpoints, open CORS, no API key. Validated to the exact gate.line against Swiss Ephemeris.",
+        "documentation": "https://freehumandesign.netlify.app/#api",
+        "termsOfService": "https://github.com/adamblvck/free-human-design/blob/main/LICENSE",
+        "provider": { "@type": "Person", "name": "Adam Blvck" }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is there a free bodygraph API?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes — free-human-design is a free, open-source bodygraph API. One GET request to /api/bodygraph returns the full bodygraph: activated gates, defined channels, defined and open centers, Type, Authority and Profile. No API key, open CORS, MIT licensed." }
+          },
+          {
+            "@type": "Question",
+            "name": "Is there a free hexagram profile API?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes — /api/hexagrams returns the complete hexagram profile: the I-Ching hexagram and line for fourteen planetary placements. It is validated to 99.4% gate agreement against an established Swiss-Ephemeris reference engine — free and open source." }
+          },
+          {
+            "@type": "Question",
+            "name": "How accurate are the calculations?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The engine is carefully tested: 259 passing tests across 13 suites (~90% coverage), planetary positions from the astronomia VSOP87 ephemeris validated to the exact gate and line against Swiss Ephemeris, five real third-party reference charts (125/130 activations exact), and a 2,000-birth deviation study against the reference engine showing 99.4% gate and 95.6% line agreement on profile placements. Houses and angles support Placidus, Whole-Sign and Equal systems." }
+          },
+          {
+            "@type": "Question",
+            "name": "Does my birth data stay private?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. The engine is pure JavaScript and runs entirely on your machine — npm install free-human-design and nothing about your birth ever leaves your computer. The hosted API is stateless and stores nothing." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I use it with ChatGPT, Claude or another AI?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes — simply point your AI engine to our URL, share your birthdata, and the AI will know what to do to obtain legitimate birthchart coordinates. Working with offline or private AI's? You can use /api/prompt returns a ready-to-paste interpretation prompt containing your full chart, so any AI can read your bodygraph and hexagram profile and help you read it." }
+          },
+          {
+            "@type": "Question",
+            "name": "How do I install the bodygraph / hexagram profile calculator for my app or website?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Run npm install free-human-design, then call computeChart({ birthdate, birthtime, timezone }) — it returns a hexagram profile, a bodygraph and astrology in one JSON. A CLI (npx free-human-design) is included. See documentation for more details." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <!-- Ambient glyph field (animated planetary glyphs) -->
+  <div class="glyph-field" id="glyphField" aria-hidden="true"></div>
+
+  <!-- ===== Nav ===== -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="#top">
+        <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><use href="#hexmark" /></svg>
+        <span class="brand-word">free-human-<span class="brand-accent">design</span></span>
+      </a>
+      <div class="nav-links">
+        <a href="#demo">Live API</a>
+        <a href="#charts">Charts</a>
+        <a href="#accuracy">Accuracy</a>
+        <a href="#api">Docs</a>
+        <a href="https://www.npmjs.com/package/free-human-design" target="_blank" rel="noopener">npm</a>
+        <a class="nav-cta" href="https://github.com/adamblvck/free-human-design" target="_blank" rel="noopener">GitHub</a>
+        <button class="icon-btn" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" id="themeIcon"></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <span id="top"></span>
+
+  <!-- ===== Hero ===== -->
+  <header class="hero">
+    <svg class="hero-ring" viewBox="0 0 600 600" aria-hidden="true">
+      <g class="ring-outer">
+        <circle cx="300" cy="300" r="298" class="hr-c" />
+        <g id="heroOuterTicks" class="hr-t"></g>
+        <g id="heroZodiac"></g>
+      </g>
+      <circle cx="300" cy="300" r="250" class="hr-c hr-static" />
+      <g class="ring-inner">
+        <circle cx="300" cy="300" r="210" class="hr-c" />
+        <g id="heroInnerTicks" class="hr-t"></g>
+      </g>
+    </svg>
+    <div class="container">
+      <div class="eyebrow">Hexagrams · Bodygraph · Astrology</div>
+      <h1>A free chart engine<br/><span class="grad">&amp; open API</span></h1>
+      <p class="tagline">
+        A <strong>carefully tested</strong> free hexagram, bodygraph &amp; astrology API —
+        <strong>local-only</strong>, and Swiss-Ephemeris-validated. A free connector to your
+        AI, app or website, so you can anchor purpose and meaning in heavenly coordinates you can actually trust.
+      </p>
+      <div class="hero-cta">
+        <a href="#demo" class="btn btn-primary">Try the live API ↓</a>
+        <button class="install" id="installBtn" title="Copy"><span class="dollar">$</span> npm install free-human-design</button>
+        <a href="https://github.com/adamblvck/free-human-design" target="_blank" rel="noopener" class="btn btn-ghost">GitHub ↗</a>
+      </div>
+      <div class="trust">
+        <span><span class="dot"></span> 259 passing tests · ~90% coverage</span>
+        <span><span class="dot"></span> 99.4% gate agreement vs a reference engine</span>
+        <span><span class="dot"></span> 2,000-birth Swiss Ephemeris study</span>
+        <span><span class="dot"></span> No data leaves your machine · MIT</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== Live demo ===== -->
+  <section id="demo">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">Live in your browser</div>
+        <h2>Cast a chart</h2>
+        <p>Enter a birth moment. It computes locally and returns a hexagram profile, a bodygraph and astrology — the same JSON the free API serves.</p>
+      </div>
+      <div class="demo-grid">
+        <!-- Form -->
+        <div class="card">
+          <div class="field">
+            <label for="date">Birth date</label>
+            <input type="date" id="date" value="1972-08-02" />
+          </div>
+          <div class="field">
+            <label for="time">Birth time</label>
+            <input type="time" id="time" value="14:30" />
+          </div>
+          <div class="field">
+            <label for="tz">IANA timezone</label>
+            <input type="text" id="tz" value="Asia/Bangkok" list="tzlist" placeholder="e.g. Europe/Brussels" />
+            <datalist id="tzlist"></datalist>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="lat">Latitude (optional)</label>
+              <input type="text" id="lat" placeholder="auto from tz" />
+            </div>
+            <div class="field">
+              <label for="lng">Longitude (optional)</label>
+              <input type="text" id="lng" placeholder="auto from tz" />
+            </div>
+          </div>
+          <button class="btn btn-primary" id="computeBtn" style="width:100%; justify-content:center;">✦ Compute chart</button>
+          <button class="btn" id="copyLinkBtn" style="width:100%; justify-content:center; margin-top:10px;" title="Copy a shareable link to this chart">🔗 Copy link to this chart</button>
+        </div>
+
+        <!-- Results -->
+        <div class="card">
+          <div class="result-tabs">
+            <button class="tab active" data-tab="summary">Summary</button>
+            <button class="tab" data-tab="json">JSON</button>
+            <button class="tab" data-tab="curl">cURL</button>
+            <button class="tab" data-tab="prompt">AI prompt</button>
+          </div>
+          <div class="endpoint-line">GET <b id="endpointUrl">/api/chart?…</b></div>
+
+          <div class="tab-panel active" id="panel-summary">
+            <div class="stat-grid">
+              <div class="stat"><div class="k">Type</div><div class="v" id="s-type">—</div></div>
+              <div class="stat"><div class="k">Authority</div><div class="v" id="s-auth">—</div></div>
+              <div class="stat"><div class="k">Profile</div><div class="v" id="s-profile">—</div></div>
+            </div>
+            <div style="font-size:0.78rem; color:var(--muted); margin:4px 0 6px;">Defined / open centers</div>
+            <div class="centers" id="s-centers"></div>
+            <div style="font-size:0.78rem; color:var(--muted); margin:16px 0 6px;">Hexagram profile</div>
+            <div class="spheres" id="s-spheres"></div>
+            <div style="font-size:0.78rem; color:var(--muted); margin:16px 0 6px;">Astrology</div>
+            <div class="centers" id="s-astro"></div>
+            <div class="copy-row">
+              <button class="btn" id="copyLinkBtn2">🔗 Copy link</button>
+            </div>
+          </div>
+
+          <div class="tab-panel" id="panel-json">
+            <pre class="code" id="jsonOut">…</pre>
+            <div class="copy-row"><button class="btn" id="copyJsonBtn">Copy JSON</button></div>
+          </div>
+          <div class="tab-panel" id="panel-curl">
+            <pre class="code" id="curlOut">…</pre>
+            <div class="copy-row"><button class="btn" id="copyCurlBtn">Copy cURL</button></div>
+          </div>
+          <div class="tab-panel" id="panel-prompt">
+            <pre class="code" id="promptOut">Click “Compute chart”, then copy a ready-to-paste prompt for your AI.</pre>
+            <div class="copy-row">
+              <button class="btn" id="copyPromptBtn">Copy AI prompt</button>
+              <a class="btn btn-ghost" id="openChatGpt" target="_blank" rel="noopener">Open in ChatGPT ↗</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Drawn charts ===== -->
+  <section id="charts">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">The engine, drawn</div>
+        <h2>The moment, drawn</h2>
+        <p>The same birth moment as an astrology wheel, with the Personality and Design planets. Cast a chart above and watch it redraw.</p>
+      </div>
+      <div class="card chart-stage">
+        <div class="chart-panel active" id="chart-astrology">
+          <svg id="wheelSvg" viewBox="0 0 640 640" role="img" aria-label="Astrology wheel with personality and design planets"></svg>
+          <div class="chart-legend">
+            <span><i class="sw sw-p"></i> Personality — natal planets</span>
+            <span><i class="sw sw-d"></i> Design — 88° solar arc before birth <b class="sw-star">✳</b></span>
+            <label class="mp-toggle" title="Show the 325 shorter-arc midpoints between the 26 activations">
+              <input type="checkbox" id="midToggle"> <i class="sw sw-mid"></i> ✳ Midpoints
+            </label>
+            <span class="legend-note" id="wheelNote"></span>
+          </div>
+          <div id="midpointsPanel" class="midpoints-panel" hidden></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Accuracy & testing ===== -->
+  <section id="accuracy">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">Proven, not promised</div>
+        <h2>A carefully tested chart engine</h2>
+        <p>More than good-enough astrology: every gate.line is regression-locked against Swiss Ephemeris, five real third-party charts, and a 2,000-birth study vs the reference engine.</p>
+      </div>
+
+      <div class="proof-kpis" aria-label="Accuracy and testing metrics">
+        <div class="proof-kpi">
+          <div class="v">259</div>
+          <div class="k">Passing tests</div>
+          <div class="d">13 suites · Jest CI on every publish</div>
+        </div>
+        <div class="proof-kpi">
+          <div class="v">~90%</div>
+          <div class="k">Code coverage</div>
+          <div class="d">Mandala, bodygraph, houses, timezones</div>
+        </div>
+        <div class="proof-kpi">
+          <div class="v">99.4%</div>
+          <div class="k">Gate agreement</div>
+          <div class="d">Profile placements vs a reference engine</div>
+        </div>
+        <div class="proof-kpi">
+          <div class="v">95.6%</div>
+          <div class="k">Line agreement</div>
+          <div class="d">Same 2,000-birth study · 14 placements</div>
+        </div>
+        <div class="proof-kpi">
+          <div class="v">2,000</div>
+          <div class="k">Births compared</div>
+          <div class="d">1600–2200 AD · 30 timezones · 52k placements</div>
+        </div>
+        <div class="proof-kpi">
+          <div class="v">125/130</div>
+          <div class="k">Exact gate.line</div>
+          <div class="d">5 real charts vs third-party Swiss Ephemeris calc</div>
+        </div>
+      </div>
+
+      <div class="proof-grid">
+        <div class="proof-block">
+          <h3>What the suite covers</h3>
+          <ul class="proof-list">
+            <li><strong>Swiss Ephemeris golden vectors</strong> — gate, line and retrograde locked in <code>profile.test.js</code></li>
+            <li><strong>Five real reference charts</strong> — independent third-party calculator; remainders within one line</li>
+            <li><strong>Reference engine study</strong> — same birth moments vs an established Swiss-Ephemeris reference engine</li>
+            <li><strong>Full bodygraph derivation</strong> — activated gates, channels, centers, Type, Authority, Profile</li>
+            <li><strong>Astrology geometry</strong> — Ascendant / MC / houses (Placidus, Whole Sign, Equal)</li>
+            <li><strong>Historical IANA timezones</strong> — 20th-century DST edge cases regression-locked</li>
+            <li><strong>Midpoint matrix</strong> — 325 shorter-arc pairs over the 26 activations</li>
+          </ul>
+        </div>
+        <div class="proof-block">
+          <h3>Vs a reference engine</h3>
+          <p class="proof-lede">Profile placements only (the keys a real profile uses) — median Δ <strong>0.01′</strong> (≈ 0.6″), well inside a hexagram line (0.9375°).</p>
+          <table class="proof-table">
+            <thead>
+              <tr><th>Metric</th><th>Profile placements</th><th>All 26 bodies</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Median Δ</td><td><strong>0.01′</strong></td><td>0.02′</td></tr>
+              <tr><td>p95 Δ</td><td><strong>0.17′</strong></td><td>10.8′</td></tr>
+              <tr><td>Gate agreement</td><td><strong>99.4%</strong></td><td>98.8%</td></tr>
+              <tr><td>Line agreement</td><td><strong>95.6%</strong></td><td>92.6%</td></tr>
+            </tbody>
+          </table>
+          <p class="proof-note">Sun &amp; planets typically match Swiss Ephemeris within <strong>&lt;1″</strong>; Moon ~10″. Pure JS (astronomia VSOP87) by default — optional <code>swisseph</code> backend if you need AGPL precision.</p>
+          <a class="btn btn-ghost" href="https://github.com/adamblvck/free-human-design#accuracy--precision" target="_blank" rel="noopener">Full accuracy docs on GitHub ↗</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Features ===== -->
+  <section>
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">One primitive, three lenses</div>
+        <h2>Everything in your profile</h2>
+        <p>A single <code>computeChart()</code> returns three coherent layers of your design.</p>
+      </div>
+      <div class="features">
+        <div class="feature">
+          <div class="ficon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          </div>
+          <h3>Hexagram profile</h3>
+          <p>The I-Ching hexagram and line for fourteen planetary placements, Personality and Design.</p>
+        </div>
+        <div class="feature">
+          <div class="ficon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <h3>Bodygraph</h3>
+          <p>Activated gates, defined channels, defined &amp; open centers, plus Type, Authority and Profile — the whole bodygraph.</p>
+        </div>
+        <div class="feature">
+          <div class="ficon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
+          </div>
+          <h3>Astrology</h3>
+          <p>Ascendant, Descendant, MC and IC with Placidus, Whole-Sign or Equal houses — from a location or just your timezone.</p>
+        </div>
+        <div class="feature">
+          <div class="ficon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <h3>Local-only</h3>
+          <p>Pure JavaScript, no native build, no ephemeris files. Nothing about your birth ever leaves the machine.</p>
+        </div>
+        <div class="feature">
+          <div class="ficon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+          </div>
+          <h3>AI connector</h3>
+          <p>One call returns a ready-to-paste prompt so any AI can interpret your design and help you read it.</p>
+        </div>
+        <div class="feature">
+          <div class="ficon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"/></svg>
+          </div>
+          <h3>Free &amp; open</h3>
+          <p>MIT licensed, free API, free npm package. Carefully tested, and validated to the exact gate.line against Swiss Ephemeris.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== API docs ===== -->
+  <section id="api">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">Docs</div>
+        <h2>Use it online or offline</h2>
+        <p>Two ways to use free-human-design — a free hosted REST API for quick online calls, or the npm package for fully local, private computation. Both return the same JSON.</p>
+      </div>
+      <div class="docs-tabs" role="tablist">
+        <button class="docs-tab active" data-docs="rest" role="tab">REST API</button>
+        <button class="docs-tab" data-docs="js" role="tab">JavaScript / npm</button>
+      </div>
+
+      <div class="docs-panel active" id="docs-rest">
+        <div class="card" style="padding:6px 6px 0;">
+          <table class="api-table">
+            <thead><tr><th>Endpoint</th><th>Returns</th></tr></thead>
+            <tbody>
+              <tr><td class="path">/api/chart</td><td>Full chart — hexagram profile + bodygraph + astrology</td></tr>
+              <tr><td class="path">/api/hexagrams</td><td>Hexagram profile only</td></tr>
+              <tr><td class="path">/api/bodygraph</td><td>Bodygraph only</td></tr>
+              <tr><td class="path">/api/astrology</td><td>Ascendant / MC / houses (needs a location)</td></tr>
+              <tr><td class="path">/api/midpoints</td><td>Advanced — midpoint matrix over the 26 activations</td></tr>
+              <tr><td class="path">/api/prompt</td><td>A ready-to-paste AI interpretation prompt</td></tr>
+              <tr><td class="path">/api/timezones</td><td>IANA timezone search (<code>?q=bali</code>)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="muted" style="font-family:var(--mono); font-size:0.84rem; margin-top:18px;">
+          Params: <b style="color:var(--accent)">date</b>=YYYY-MM-DD &nbsp;
+          <b style="color:var(--accent)">time</b>=HH:mm &nbsp;
+          <b style="color:var(--accent)">tz</b>=IANA &nbsp;
+          [<b style="color:var(--accent)">lat</b> <b style="color:var(--accent)">lng</b> <b style="color:var(--accent)">house</b>=placidus|whole|equal
+          <b style="color:var(--accent)">midpoints</b>=1]
+        </p>
+      </div>
+
+      <div class="docs-panel" id="docs-js">
+        <div class="card js-docs">
+          <p class="js-docs-intro">Install the npm package and compute charts in pure JavaScript — no native build, no ephemeris files, your birth data never leaves your machine.</p>
+
+          <div class="code-block">
+            <div class="code-block-head"><span>Install</span><button class="copy-mini" data-copy="npm install free-human-design">Copy</button></div>
+            <pre class="code">npm install free-human-design</pre>
+          </div>
+
+          <div class="code-block">
+            <div class="code-block-head"><span>Usage</span><button class="copy-mini" id="copyUsageBtn">Copy</button></div>
+<pre class="code">const { computeChart } = require('free-human-design');
+
+const chart = computeChart({
+  birthdate: '1972-08-02',
+  birthtime: '14:30',
+  timezone: 'Asia/Bangkok',
+});
+
+console.log(chart.bodygraph.type);                // "Manifesting Generator"
+console.log(chart.bodygraph.profile);             // "3/5"
+console.log(chart.hexagrams.p_sun.hexagram);   // 33
+console.log(chart.astrology.angles.ascendant.sign); // "Sagittarius"</pre>
+          </div>
+
+          <div class="code-block">
+            <div class="code-block-head"><span>CLI</span><button class="copy-mini" data-copy="npx free-human-design --chart --date 1972-08-02 --time 14:30 --tz Asia/Bangkok">Copy</button></div>
+            <pre class="code">npx free-human-design --chart --date 1972-08-02 --time 14:30 --tz Asia/Bangkok</pre>
+          </div>
+
+          <div class="js-docs-footer">
+            <a class="btn btn-ghost" href="https://github.com/adamblvck/free-human-design" target="_blank" rel="noopener">Full docs on GitHub ↗</a>
+            <button class="btn btn-primary" id="copyMarkdownBtn">Copy markdown for LLM use</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section id="faq">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">Questions</div>
+        <h2>Frequently asked</h2>
+        <p>Everything people ask before they cast their first chart.</p>
+      </div>
+      <div class="faq-list">
+        <details>
+          <summary>Is there a free bodygraph API?</summary>
+          <p>Yes — this is a free, open-source <strong>bodygraph API</strong>. One GET request to <code>/api/bodygraph</code> returns the full bodygraph: activated gates, defined channels, defined and open centers, Type, Authority and Profile. No API key, open CORS, MIT licensed.</p>
+        </details>
+        <details>
+          <summary>Is there a free hexagram profile API?</summary>
+          <p>Yes — <code>/api/hexagrams</code> returns the complete <strong>hexagram profile</strong>: the I-Ching hexagram and line for fourteen planetary placements. Free and open source.</p>
+        </details>
+        <details>
+          <summary>How accurate are the calculations?</summary>
+          <p>The engine is <strong>carefully tested</strong>: <strong>259 passing tests</strong> across 13 suites (~90% coverage). Planetary positions come from the astronomia VSOP87 ephemeris and are validated to the exact <em>gate.line</em> against Swiss Ephemeris — including five real third-party charts (125/130 activations exact). A 2,000-birth deviation study against the reference engine shows <strong>99.4% gate</strong> and <strong>95.6% line</strong> agreement on profile placements. See the <a href="#accuracy">Accuracy</a> section for the full breakdown.</p>
+        </details>
+        <details>
+          <summary>Does my birth data stay private?</summary>
+          <p>Yes. The engine is pure JavaScript and runs entirely on your machine — <code>npm install free-human-design</code> and nothing about your birth ever leaves your computer. The hosted API is stateless and stores nothing.</p>
+        </details>
+        <details>
+          <summary>Can I use it with ChatGPT, Claude or another AI?</summary>
+          <p>Yes — <code>/api/prompt</code> returns a ready-to-paste interpretation prompt containing your full chart, so any AI can read your bodygraph and hexagram profile and help you read it.</p>
+        </details>
+        <details>
+          <summary>How do I install it?</summary>
+          <p><code>npm install free-human-design</code>, then <code>computeChart({ birthdate, birthtime, timezone })</code> returns a hexagram profile, a bodygraph and astrology in one JSON. A CLI is included: <code>npx free-human-design --chart --date 1972-08-02 --time 14:30 --tz Asia/Bangkok</code>.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Teaching ===== -->
+  <section class="teaching">
+    <div class="container">
+      <div class="card">
+        <div class="eyebrow">Beyond the numbers</div>
+        <blockquote>“The calculation is only the doorway. The contemplation is the path.”</blockquote>
+        <p class="muted">free-human-design gives you the map for free — your hexagram profile, your bodygraph, your stars — so you can spend your energy where it matters: living with what the chart shows you.</p>
+        <div class="hero-cta" style="margin-top:22px;">
+          <a href="#demo" class="btn btn-primary">Cast your chart</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer>
+    <div class="container footer-inner">
+      <div class="brand" style="font-size:1.05rem;">
+        <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><use href="#hexmark" /></svg>
+        <span class="brand-word">free-human-<span class="brand-accent">design</span></span>
+      </div>
+      <div class="footer-links">
+        <a href="https://www.npmjs.com/package/free-human-design" target="_blank" rel="noopener">npm</a>
+        <a href="https://github.com/adamblvck/free-human-design" target="_blank" rel="noopener">GitHub</a>
+        <a href="#api">API</a>
+        <a href="https://github.com/adamblvck/free-human-design/blob/main/LICENSE" target="_blank" rel="noopener">MIT</a>
+      </div>
+      <div class="muted" style="font-size:0.84rem;">Crafted by Adam&nbsp;Blvck · BLVCK&nbsp;STUDIO</div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- ===== SVG defs (mark) ===== -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#a78bfa" />
+        <stop offset="1" stop-color="#d8b46a" />
+      </linearGradient>
+      <!-- Hexagram mark: a ring with six I-Ching lines (4 solid, 2 broken) -->
+      <g id="hexmark">
+        <circle cx="16" cy="16" r="14" fill="none" stroke="url(#g1)" stroke-width="1.6" />
+        <g stroke="url(#g1)" stroke-width="2.4" stroke-linecap="round">
+          <line x1="9" y1="9" x2="23" y2="9" />
+          <line x1="9" y1="13" x2="14" y2="13" /><line x1="18" y1="13" x2="23" y2="13" />
+          <line x1="9" y1="17" x2="23" y2="17" />
+          <line x1="9" y1="21" x2="14" y2="21" /><line x1="18" y1="21" x2="23" y2="21" />
+        </g>
+      </g>
+    </defs>
+  </svg>
+
+  <script src="sample-chart.js"></script>
+  <script src="charts.min.js"></script>
+  <script src="midpoints.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+node_modules
+coverage
+.DS_Store
+*.log
+.netlify
+*.tgz
+.claude/
+
+# Deviation-study raw cache (large, re-runnable via scripts/deviation-study.js).
+# The rendered reports (deviation-report.md/.html) are kept.
+scripts/data/deviation-*.json
